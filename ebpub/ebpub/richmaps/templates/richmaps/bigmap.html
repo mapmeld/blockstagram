@@ -1,0 +1,51 @@
+{% extends "base.html" %}{% comment %} -*- mode: django-html; tab-width: 4 -*- {% endcomment %}
+{% load django_static eb humanize mapping %}
+
+{% block fulltitle %}OpenBlock{% endblock %}
+
+{% block extrahead %}
+{% slimall %}
+<link rel="stylesheet" type="text/css" href="/styles/calendrical.css" />
+<script src="/scripts/jquery.calendrical.js"></script>
+{% endslimall %}
+
+{% endblock %}
+
+{% block content %}
+    <div id="map_headlines" class="map-headlines"></div>
+		<div id="mapwrapper" class="fullpage">
+		  <script type="text/javascript">
+	    {% autoescape off %}
+      function loadMap() {
+          var config = {{map_config}};
+	/*
+          config['baselayer_type']  = "{{ MAP_BASELAYER_TYPE }}";
+
+          var map = new OBMap(config);
+          map.map.addControl(new OpenLayers.Control.LayerSwitcher());
+          
+          var permalink = new OpenblockPermalink(map);
+          map.map.addControl(permalink);
+
+          var dateControl = new OBMapDateRange(map, permalink, '#map_date_range_form');
+
+          var headlines = new OBMapItemList(map, {'element': '#map_headlines'});
+          $('#mapwrapper').css('margin-left', $('#map_headlines').css('width'));
+	*/          
+          return map;
+      }
+      {% endautoescape %}
+		  </script>
+		{% include "richmaps/richmap.html" %}
+		</div><!-- end mapwrapper -->
+    <div id="map_date_range">
+        <form action="#" id="map_date_range_form">
+        		<label for="map_begin_date">Start Date</label>
+        		<input type="text" class="begin-date" id="map_begin_date" />
+        		<label for="map_end_date">End Date</label>
+    		    <input type="text" class="end-date" id="map_end_date" />
+    		    <input type="submit" value="change" />
+  		  </form>
+    </div>
+
+{% endblock %}

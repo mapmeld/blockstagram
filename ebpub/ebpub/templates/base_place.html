@@ -1,0 +1,218 @@
+{% extends "base.html" %}{% comment %}<!-- -*- mode: django-html; tab-width: 4 -*- -->{% endcomment %}
+
+{% load eb mapping %}
+
+{% comment %}
+Base template for all "place" pages -- either block or location.
+Implements only the "top" of the page -- the title and "Nearby" list.
+
+Required variables: nearby_locations, place, is_block
+{% endcomment %}
+
+<!-- begin block content -->
+{% block content %}
+<div id="nav-location">
+	<!-- begin block map -->
+	{% block map %}
+	<div id="mapwrapper" class="claro">
+		<script type="text/javascript">
+		{% autoescape off %}
+function loadMap() {
+	$j("#place-detail-content").html($j("#place-detail-content").html() + "<h2>Photos</h2>" );
+
+	incidentPointSymbol = new esri.symbol.PictureMarkerSymbol({
+  		"url":"http://i.imgur.com/dS1At.png",
+  		"height":24,
+  		"width":20,
+		"yoffset":10,
+  		"type":"esriPMS"
+ 	});
+
+	var config = {{map_configuration}};
+	dojo.forEach(config.locations, function(geojsonurl){
+	        esri.request({
+	                url:geojsonurl.url,
+	                handleAs:"json",
+	                load:function(d){
+				if(d.properties.description.length > 2 && d.properties.description.indexOf(" ") == -1){
+					document.getElementById("detailmap").innerHTML = "";
+
+	        			var mapDeferred = esri.arcgis.utils.createMap(d.properties.description, "detailmap", {
+	          				mapOptions: {
+	            					slider: true,
+	            					nav:false
+	          				}
+	        			});
+	        			mapDeferred.addCallback(function(response) {
+						map = response.map;
+						mapNow(d);
+					});
+				}
+				else{
+					mapNow(d);
+				}
+	                }
+        	});
+	});
+}
+
+
+function mapNow(d){
+	polygonbounds = [ ];
+	var polygon = new esri.geometry.Polygon(new esri.SpatialReference({ wkid: 4326 }));
+	var viewExtent;
+	if(d.geometry.type == "MultiPolygon"){
+		for(var r=0;r<d.geometry.coordinates[0].length;r++){
+			polygon.addRing( d.geometry.coordinates[0][r] );
+		}
+		viewExtent = polygon.getExtent();
+
+		for(var p=1;p<d.geometry.coordinates.length;p++){
+			var polygon2 = new esri.geometry.Polygon(new esri.SpatialReference({ wkid: 4326 }));
+			for(var r=0;r<d.geometry.coordinates[p].length;r++){
+				polygon2.addRing( d.geometry.coordinates[p][r] );
+			}
+			viewExtent = viewExtent.union(polygon2.getExtent());
+			polygonbounds.push(polygon2);
+
+			polygon2 = esri.geometry.geographicToWebMercator( polygon2 );
+			var loc2 = new esri.Graphic( polygon2,  new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID,
+				new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+				new dojo.Color([255,0,150]), 2),new dojo.Color([255,255,0,0.25])) );
+                	map.graphics.add(loc2);
+		}
+	}
+	else{
+		for(var r=0;r<d.geometry.coordinates.length;r++){
+			polygon.addRing( d.geometry.coordinates[r] );
+		}
+		viewExtent = polygon.getExtent();
+	}
+	polygonbounds.push(polygon);
+	pushFlickr(viewExtent);
+	//pushPanoramio(viewExtent);
+
+	polygon = esri.geometry.geographicToWebMercator( polygon );
+	var loc = new esri.Graphic( polygon,  new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID,
+	 	new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+		 new dojo.Color([255,0,150]), 2),new dojo.Color([255,255,0,0.25])) );
+        map.graphics.add(loc);
+	map.setExtent( esri.geometry.geographicToWebMercator( viewExtent ), true );
+}
+
+var polygonbounds = [ ];
+var incidentPointSymbol;
+
+
+function pushPanoramio(bounds){
+	var s = document.createElement('script');
+	s.src = "http://www.panoramio.com/map/get_panoramas.php?set=public&from=0&to=10&minx=" + bounds.xmin + "&miny=" + bounds.ymin + "&maxx=" + bounds.xmax + "&maxy=" + bounds.ymax + "&size=thumbnail&mapfilter=true&from=0&to=50&callback=viewPhotos";
+	s.type = "text/javascript";
+	document.body.appendChild(s);
+}
+function viewPhotos(pan){
+	pan.photos.sort(
+		function(a,b){
+			return (new Date(b.upload_date)) - (new Date(a.upload_date));
+		}
+	);
+	var printedMonth = "1 January 2000";
+	for(var p=0;p<pan.photos.length;p++){
+		var photoPoint = new esri.geometry.Point( pan.photos[p].longitude, pan.photos[p].latitude );
+		var hasPhoto = false;
+		for(var g=0;g<polygonbounds.length;g++){
+			if(polygonbounds[g].contains(photoPoint)){
+				hasPhoto = true;
+				break;
+			}
+		}
+		if(hasPhoto){
+			var monthMatch = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+			var instantDate = new Date(pan.photos[p].upload_date);
+			if(printedMonth.indexOf(instantDate.getFullYear()) < -1){
+				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
+				$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
+			}
+			else if(printedMonth.indexOf(monthMatch[instantDate.getMonth()])){
+				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
+				$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
+			}
+			$j("#place-detail-content").html($j("#place-detail-content").html() + "<img src='" + pan.photos[p].photo_file_url + "' width='120'/>" );
+			map.graphics.add(new esri.Graphic(new esri.geometry.geographicToWebMercator(new esri.geometry.Point( pan.photos[p].longitude, pan.photos[p].latitude )), incidentPointSymbol));
+		}
+	}
+}
+function pushFlickr(bounds){
+	var s = document.createElement('script');
+	s.src = "http://api.flickr.com/services/rest/?bbox=" + bounds.xmin + "," + bounds.ymin + "," + bounds.xmax + "," + bounds.ymax + "&extras=geo,owner_name,date_taken&per_page=40&tags=&method=flickr.photos.search&api_key=8f28e831de92bb79fcb9ec299227020a&has_geo=1&page=1&format=json&jsoncallback=loadFlickr&min_taken_date=2012-1-1";
+	s.type = "text/javascript";
+	document.body.appendChild(s);
+}
+function loadFlickr(response){
+	var photos = response.photos.photo;
+	photos.sort(function(a,b){
+		return (new Date(b.datetaken)) - (new Date(a.datetaken));
+	});
+	var printedMonth = "1 January 2000";
+	for(var p=0; p<photos.length; p++){
+		var flickrUrl = "http://farm"+photos[p].farm+".static.flickr.com/"+photos[p].server+"/"+photos[p].id+"_"+photos[p].secret+"_m.jpg";
+		photoPoint = new esri.geometry.Point( photos[p].longitude, photos[p].latitude );
+		var hasPhoto = false;
+		for(var g=0;g<polygonbounds.length;g++){
+			if(polygonbounds[g].contains(photoPoint)){
+				hasPhoto = true;
+				break;
+			}	
+		}
+		if(hasPhoto){
+			var monthMatch = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+			var instantDate = new Date(photos[p].datetaken);
+			if(printedMonth.indexOf(instantDate.getFullYear()) < -1){
+				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
+				$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
+			}
+			else if(printedMonth.indexOf(monthMatch[instantDate.getMonth()])){
+				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
+				$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
+			}
+			//console.log(photoPoint);
+			map.graphics.add(new esri.Graphic(esri.geometry.geographicToWebMercator(photoPoint), incidentPointSymbol));
+			$j("#place-detail-content").html($j("#place-detail-content").html() + "<a href='" + flickrUrl.replace("_m.jpg","_c.jpg") + "' target='_blank'><img src='" + flickrUrl + "' width='120'/></a>" );
+		}
+	}
+}
+
+	 	{% endautoescape %}
+		</script>
+		{% include "richmaps/richmap.html" %}
+	</div><!--/ #mapwrapper -->
+	{% endblock map %}
+	<!-- end block map -->
+
+	<!-- block subscribe_links -->
+    {% block subscribe_links %}
+	<div class="subscribe-links">
+		<p>Stay up to date:
+		  <a href="{{ place.url }}feeds/">Custom RSS feeds</a>
+		  {% if alerts_installed %}<a href="{{ place.alert_url }}">E-mail alerts</a>{% endif %}
+		</p>
+	</div>
+    {% endblock %}
+	<!-- end block subscribe_links -->
+
+	{% if nearby_locations %}
+	<div id="nearby">
+	<h2>Nearby locations</h2>
+		<ul>
+			{% for location in nearby_locations %}
+			<li><a id="location-{{ location.id }}" href="{{ location.url }}">{{ location.name }}</a></li>
+			{% endfor %}
+		</ul>
+	</div><!-- end #nearby -->
+	{% endif %}
+
+</div><!--/ #nav-location -->
+<!-- begin block place_content -->
+{% block place_content %}{% endblock %}
+<!-- end block place_content -->
+{% endblock content %}

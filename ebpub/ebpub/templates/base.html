@@ -1,0 +1,231 @@
+{% comment %}<!-- -*- mode: django-html; tab-width: 4 -*- -->{% endcomment %}
+{% load eb %}{% load django_static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+<title>{% block fulltitle %}{% block title %}{% endblock %} | {% block city_title %}OpenBlock{% endblock %}{% endblock fulltitle %}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="robots" content="noarchive">
+<link rel="home" title="Home" href="{% url ebpub-homepage %}">
+
+{% slimall %}
+<link rel="stylesheet" type="text/css" href="/styles/style-reset.css" />
+<link rel="stylesheet" type="text/css" href="/styles/openblock.css" />
+{% endslimall %}
+
+<script src="{{ JQUERY_URL }}" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+// Not using jquery.noConflict() because ironically it causes a conflict
+// with OpenLayers and we end up with the $ function from OpenLayers. 
+// But a lot of existing everyblock code expects $j instead of $
+var $j = $;
+</script>
+{% slimall %}
+<script src="/scripts/ob-jquery-csrf.js" type="text/javascript" charset="utf-8"></script>
+{% endslimall %}
+
+<!-- ArcGIS -->
+<script type="text/javascript">var djConfig = {parseOnLoad: true};</script>
+<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.8compact"></script>
+<style type="text/css">
+#detailmap_infowindow div .window{
+	display: none;
+}
+#content{
+	width: 380px;
+}
+#nav-location{
+	width: 500px;
+}
+</style>
+<link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.8/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">
+dojo.require("dijit.layout.ContentPane");
+dojo.require("esri.map");
+dojo.require("esri.layers.agstiled");
+dojo.require("esri.layers.graphics");
+dojo.require("esri.layers.FeatureLayer");
+dojo.require("esri.arcgis.utils");
+
+var map, incidentsGraphicsLayer, initExtent;
+
+function mapinit() {
+	initExtent = new esri.geometry.Extent({
+		"xmin":-83.702193,
+		"ymin":32.781055,
+		"xmax":-83.54538,
+		"ymax":32.892187,
+		"spatialReference":{"wkid":4326}
+	});
+	initExtent = initExtent.expand(1.5);
+	var urlObject = esri.urlToObject(document.location.href);
+	if(urlObject.query && urlObject.query.watercolor){
+		document.body.style.background = "transparent url(http://images.colourbox.com/thumb_COLOURBOX1281296.jpg) top left";
+	}
+	if(urlObject.query && urlObject.query.webmap){
+		var b=esri.arcgis.utils.createMap(
+			urlObject.query.webmap,
+			"detailmap",
+			{
+				mapOptions: {
+					slider:true,
+					nav:false,
+					wrapAround180:true
+				}
+			});
+		b.addCallback(function(e){
+			map=e.map;
+			if(map.loaded){
+				onMapLoaded();
+			}
+			else{
+				dojo.connect(map,"onLoad",onMapLoaded);
+			}
+		});
+		b.addErrback(function(e){
+			console.log("CreateMap failed: ",dojo.toJson(e));
+			alert(dojo.toJson(e));
+		});
+	}
+	else{
+		map = new esri.Map("detailmap",{
+			extent: esri.geometry.geographicToWebMercator(initExtent),
+			minZoom: 10
+		});
+		onMapLoaded();
+	}
+}
+function onMapLoaded(){
+	map.setExtent( esri.geometry.geographicToWebMercator(initExtent), true );
+
+	//Add the topographic layer to the map. View the ArcGIS Online site for services http://arcgisonline/home/search.html?t=content&f=typekeywords:service 
+	var urlObject = esri.urlToObject(document.location.href);
+	if(!urlObject.query || !urlObject.query.webmap){
+		if(urlObject.query && urlObject.query.watercolor){
+			var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://c.tile.stamen.com/toner"  ], format: "JPEG"  });
+			map.addLayer(osmLayer);
+		}
+		else{
+			var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
+			map.addLayer(basemap);
+		}
+	}
+
+
+	//Add Bibb County features
+	if($("#nav-breadcrumb").children().length > 1){
+		//Add Bibb County GIS
+		var bibb = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.co.bibb.ga.us/ArcGISBibb/rest/services/AG4LG/ParcelPublicAccess/MapServer");
+		map.addLayer(bibb);
+	}
+
+	dojo.connect(map, "onLoad", function(){
+		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+	});
+	loadMap();
+}
+dojo.addOnLoad(mapinit);
+</script>
+
+<!-- begin block extrahead -->
+{% block extrahead %}{% endblock %}
+<!-- end block extrahead -->
+
+<style type="text/css">
+#detailmap{
+	width:100%;
+	height:100%;
+	padding:0;
+	margin:0;
+}
+body{
+	background: transparent url(http://i.imgur.com/fxBx3.png) top left;
+}
+#header{
+	background-color:#fff;
+}
+#nav-location{
+	background-color:#fff;
+	padding:10px;
+	margin:-10px;
+	border-radius:6px;
+	border: 4px solid #fff;
+	border-left:none;
+}
+#content{
+	background-color:#fff;
+	padding:10px;
+	margin:-10px;
+	border-radius:6px;
+	border: 4px solid #fff;
+	border-right:none;
+}
+#container{
+	background:#fff;
+	background-color:#fff;
+}
+ul#nav-breadcrumb, #nav-breadcrumb li{
+	color:#fff;
+	background-color:#000;
+}
+</style>
+
+</head>
+<body {% if bodyid %}id="{{bodyid}}"{% endif %} {% if bodyclass %}class="{{bodyclass}}"{% endif %}>
+  <div id="container">
+	<div id="header">
+		<h1><a href="{% url ebpub-homepage %}">OpenBlock: {% METRO_NAME %}</a></h1>
+		<div id="globalnav">
+		    <!--
+			<ul>
+				<li><a href="/news/">News</a></li>
+				<li><a href="/locations/">Locations</a></li>
+			</ul>
+			-->
+			{% block userlinks %}
+			<div id="userlinks">
+			  {% if USER_EMAIL %}
+			  <form action="{% url ebpub.accounts.views.logout %}" method="POST">
+				{% csrf_token %}
+				<p>Logged in as <a href="{% url ebpub.accounts.views.dashboard %}">{{ USER_EMAIL }}</a>. <button type="submit">Log out</button></p>
+			  </form>
+			  {% else %}
+			  <p><a href="{% url ebpub.accounts.views.login %}" rel="nofollow">Sign in</a> or <a href="{% url ebpub.accounts.views.register %}" rel="nofollow">register</a> for extra features</p>
+			  {% endif %}
+			</div><!--/ #userlinks -->
+			{% endblock userlinks %}
+			{% set_search_placeholder "Search for" as placeholder %}
+			<form action="{% url ebpub-search %}" id="globalsearch" onsubmit="if ($j('#searchinput').val() == '{{ placeholder }}') return false; return true;">
+				<p>
+					<label for="searchinput">{{ placeholder}}</label>
+					<input type="text" id="searchinput" name="q" value="{{ placeholder }}" onfocus="if (this.value == '{{ placeholder }}') { this.value = ''; }" onblur="if (this.value == '') { this.value = '{{ placeholder }}'; }">
+					<button type="submit">Go</button>
+				</p>
+			</form>
+		</div><!--/ #globalnav -->
+		<!-- begin block breadcrumbs -->
+		{% block breadcrumbs %}
+		{% include "db/snippets/breadcrumbs.html" %}
+		{% endblock breadcrumbs %}
+		<!-- end block breadcrumbs -->
+	</div><!-- / #header -->
+	<div id="main">
+	  <!-- begin block messages -->
+		{% block messages %}
+	    {% if messages %}
+	    <ul class="messages">
+		  {% for message in messages %}
+		  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		  {% endfor %}
+		</ul>
+		{% endif %}
+		{% endblock messages %}
+        <!-- end block messages -->
+		<!-- begin block content -->
+		{% block content %}{% endblock content %}
+		<!-- end block content -->
+	</div><!-- / #main -->
+  </div><!-- / #container -->
+</body>
+</html>
