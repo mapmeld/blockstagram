@@ -3,7 +3,7 @@ A downtown development concept
 
 Think of each page as a brochure for that neighborhood
 
-<img src="http://imgur.com/FxCtT" width="400"/>
+<img src="http://i.imgur.com/FxCtT.png" width="450"/>
 
 Imported Zipcodes, Opportunity Zones, and Tax Abatement Districts
 
@@ -18,9 +18,11 @@ Integration with that platform allows us to combine government data and social m
 <br/>
 - This version of OpenBlock replaces OpenLayers maps with Esri's ArcGIS JavaScript API.
 <br/>
-- You can tie a neighborhood to an ArcGIS Online web map by setting the Description to a web map ID
+- Tie a neighborhood to an ArcGIS Online web map by setting the Description to a web map ID
 <br/>
-- You can show an ArcGIS Online web map with any neighborhood page by adding &webmap=[ID] to any neighborhood URL
+- Import an ArcGIS Online web map onto any neighborhood view by adding &webmap=[ID] to any page URL
+<br/>
+- Restyle with watercolor maps by adding &watercolor=true to any page URL
 
 <h3>Install</h3>
 This repo contains changes made to the Amazon EC2 AMI.
