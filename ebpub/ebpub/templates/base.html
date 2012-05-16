@@ -60,9 +60,6 @@ function mapinit() {
 	});
 	initExtent = initExtent.expand(1.5);
 	var urlObject = esri.urlToObject(document.location.href);
-	if(urlObject.query && urlObject.query.watercolor){
-		document.body.style.background = "transparent url(http://images.colourbox.com/thumb_COLOURBOX1281296.jpg) top left";
-	}
 	if(urlObject.query && urlObject.query.webmap){
 		var b=esri.arcgis.utils.createMap(
 			urlObject.query.webmap,
@@ -103,21 +100,23 @@ function onMapLoaded(){
 	var urlObject = esri.urlToObject(document.location.href);
 	if(!urlObject.query || !urlObject.query.webmap){
 		if(urlObject.query && urlObject.query.watercolor){
-			var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://c.tile.stamen.com/toner"  ], format: "JPEG"  });
+			// custom watercolor look
+			var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://c.tile.stamen.com/watercolor" ] });
 			map.addLayer(osmLayer);
 		}
 		else{
-			var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
+			//var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
+			var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
 			map.addLayer(basemap);
+
+			//Add Bibb County features
+			if($("#nav-breadcrumb").children().length > 1){
+				//Add Bibb County GIS
+				var bibb = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.co.bibb.ga.us/ArcGISBibb/rest/services/AG4LG/ParcelPublicAccess/MapServer");
+				map.addLayer(bibb);
+			}
+
 		}
-	}
-
-
-	//Add Bibb County features
-	if($("#nav-breadcrumb").children().length > 1){
-		//Add Bibb County GIS
-		var bibb = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.co.bibb.ga.us/ArcGISBibb/rest/services/AG4LG/ParcelPublicAccess/MapServer");
-		map.addLayer(bibb);
 	}
 
 	dojo.connect(map, "onLoad", function(){

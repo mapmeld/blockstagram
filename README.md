@@ -3,6 +3,10 @@ A downtown development concept
 
 Think of each page as a brochure for that neighborhood
 
+<img src="http://imgur.com/FxCtT" width="400"/>
+
+Imported Zipcodes, Opportunity Zones, and Tax Abatement Districts
+
 <h3>Based on OpenBlock</h3>
 See <a href="http://demo.openblockproject.org">OpenBlock Demo</a>
 and <a href="https://github.com/openplans/openblock">OpenBlock GitHub repo</a>.
