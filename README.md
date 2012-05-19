@@ -3,7 +3,7 @@ A downtown development concept
 
 Think of each page as a brochure for that neighborhood
 
-<img src="http://i.imgur.com/FxCtT.png" width="450"/>
+<img src="http://i.imgur.com/FxCtT.png"/>
 
 Imported Zipcodes, Opportunity Zones, and Tax Abatement Districts
 
@@ -21,6 +21,7 @@ Integration with that platform allows us to combine government data and social m
 - Tie a neighborhood to an ArcGIS Online web map by setting the Description to a web map ID
 <br/>
 - Import an ArcGIS Online web map onto any neighborhood view by adding &webmap=[ID] to any page URL
+<img src="http://i.imgur.com/o7ZBv.png"/>
 <br/>
 - Restyle with watercolor maps by adding &watercolor=true to any page URL
 
