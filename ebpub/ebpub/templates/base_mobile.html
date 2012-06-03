@@ -1,0 +1,198 @@
+{% comment %}<!-- -*- mode: django-html; tab-width: 4 -*- -->{% endcomment %}
+{% load eb %}{% load django_static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block fulltitle %}{% block title %}{% endblock %} | {% block city_title %}OpenBlock{% endblock %}{% endblock fulltitle %}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="robots" content="noarchive"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<link rel="home" title="Home" href="{% url ebpub-homepage %}"/>
+
+{% slimall %}
+<link rel="stylesheet" type="text/css" href="/styles/style-reset.css" />
+<link rel="stylesheet" type="text/css" href="/styles/openblock.css" />
+{% endslimall %}
+
+<script src="{{ JQUERY_URL }}" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+// Not using jquery.noConflict() because ironically it causes a conflict
+// with OpenLayers and we end up with the $ function from OpenLayers. 
+// But a lot of existing everyblock code expects $j instead of $
+var $j = $;
+</script>
+{% slimall %}
+<script src="/scripts/ob-jquery-csrf.js" type="text/javascript" charset="utf-8"></script>
+{% endslimall %}
+
+<!-- ArcGIS -->
+<script type="text/javascript">var djConfig = {parseOnLoad: true};</script>
+<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.8compact"></script>
+<style type="text/css">
+#detailmap_infowindow div .window{
+	display: none;
+}
+#content{
+	width: 380px;
+}
+#nav-location{
+	width: 500px;
+}
+#nav-breadcrumb li:last-child{
+	background: none;
+}
+</style>
+<link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.8/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript">
+dojo.require("esri.map");
+dojo.require("esri.layers.graphics");
+dojo.require("esri.layers.FeatureLayer");
+dojo.require("esri.arcgis.utils");
+
+var map, incidentsGraphicsLayer, initExtent;
+
+function mapinit() {
+	initExtent = new esri.geometry.Extent({
+		"xmin":-83.702193,
+		"ymin":32.781055,
+		"xmax":-83.54538,
+		"ymax":32.892187,
+		"spatialReference":{"wkid":4326}
+	});
+	initExtent = initExtent.expand(1.5);
+	var urlObject = esri.urlToObject(document.location.href);
+	if(urlObject.query && urlObject.query.webmap){
+		var b=esri.arcgis.utils.createMap(
+			urlObject.query.webmap,
+			"detailmap",
+			{
+				mapOptions: {
+					slider:true,
+					nav:false,
+					wrapAround180:true
+				}
+			});
+		b.addCallback(function(e){
+			map=e.map;
+			if(map.loaded){
+				onMapLoaded();
+			}
+			else{
+				dojo.connect(map,"onLoad",onMapLoaded);
+			}
+		});
+		b.addErrback(function(e){
+			console.log("CreateMap failed: ",dojo.toJson(e));
+			alert(dojo.toJson(e));
+		});
+	}
+	else{
+		map = new esri.Map("detailmap",{
+			extent: esri.geometry.geographicToWebMercator(initExtent),
+			minZoom: 10
+		});
+		onMapLoaded();
+	}
+}
+function onMapLoaded(){
+	// mobile: toner only
+	map.setExtent( esri.geometry.geographicToWebMercator(initExtent), true );
+	var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://tile.stamen.com/toner" ] });
+	map.addLayer(osmLayer);
+
+	dojo.connect(map, "onLoad", function(){
+		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
+	});
+	loadMap();
+}
+dojo.addOnLoad(mapinit);
+</script>
+
+<!-- begin block extrahead -->
+{% block extrahead %}{% endblock %}
+<!-- end block extrahead -->
+
+<style type="text/css">
+#detailmap{
+	width:86%;
+	height:100%;
+	padding:0;
+	margin:15px;
+}
+#header{
+	background-color:#fff;
+}
+#nav-location{
+	background-color:#fff;
+	padding:10px;
+	margin:-10px;
+	border-radius:6px;
+	border: 4px solid #fff;
+	border-left:none;
+	float: none;
+}
+#content{
+	background-color:#fff;
+}
+#container{
+	background-color:#fff;
+}
+ul#nav-breadcrumb, #nav-breadcrumb li{
+	color:#fff;
+	background-color:#000;
+}
+</style>
+
+</head>
+<body {% if bodyid %}id="{{bodyid}}"{% endif %} {% if bodyclass %}class="{{bodyclass}}"{% endif %}>
+  <div id="container">
+	<div id="header">
+		<h1><a href="{% url ebpub-homepage %}">OpenBlock: {% METRO_NAME %}</a></h1>
+		<div id="globalnav">
+			{% block userlinks %}
+			<div id="userlinks">
+			  {% if USER_EMAIL %}
+			  <form action="{% url ebpub.accounts.views.logout %}" method="POST">
+				{% csrf_token %}
+				<p>Logged in as <a href="{% url ebpub.accounts.views.dashboard %}">{{ USER_EMAIL }}</a>. <button type="submit">Log out</button></p>
+			  </form>
+			  {% else %}
+			  <p><a href="{% url ebpub.accounts.views.login %}" rel="nofollow">Sign in</a> or <a href="{% url ebpub.accounts.views.register %}" rel="nofollow">register</a> for extra features</p>
+			  {% endif %}
+			</div><!--/ #userlinks -->
+			{% endblock userlinks %}
+			{% set_search_placeholder "Search for" as placeholder %}
+			<form action="{% url ebpub-search %}" id="globalsearch" onsubmit="if ($j('#searchinput').val() == '{{ placeholder }}') return false; return true;">
+				<p>
+					<label for="searchinput">{{ placeholder}}</label>
+					<input type="text" id="searchinput" name="q" value="{{ placeholder }}" onfocus="if (this.value == '{{ placeholder }}') { this.value = ''; }" onblur="if (this.value == '') { this.value = '{{ placeholder }}'; }">
+					<button type="submit">Go</button>
+				</p>
+			</form>
+		</div><!--/ #globalnav -->
+		<!-- begin block breadcrumbs -->
+		{% block breadcrumbs %}
+		{% include "db/snippets/breadcrumbs.html" %}
+		{% endblock breadcrumbs %}
+		<!-- end block breadcrumbs -->
+	</div><!-- / #header -->
+	<div id="main">
+	  <!-- begin block messages -->
+		{% block messages %}
+	    {% if messages %}
+	    <ul class="messages">
+		  {% for message in messages %}
+		  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		  {% endfor %}
+		</ul>
+		{% endif %}
+		{% endblock messages %}
+        <!-- end block messages -->
+		<!-- begin block content -->
+		{% block content %}{% endblock content %}
+		<!-- end block content -->
+	</div><!-- / #main -->
+  </div><!-- / #container -->
+</body>
+</html>
