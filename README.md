@@ -49,4 +49,4 @@ Use these commands to quickly replace a file on EC2:
 
 When finished, enter this into the terminal to update the server:
 
-touch /home/openblock/openblock/wsgi/myblock.wsgi
+    touch /home/openblock/openblock/wsgi/myblock.wsgi
