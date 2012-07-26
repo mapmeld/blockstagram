@@ -28,6 +28,7 @@ var $j = $;
 <!-- ArcGIS -->
 <script type="text/javascript">var djConfig = {parseOnLoad: true};</script>
 <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.8compact"></script>
+<link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.8/js/esri/dijit/css/Popup.css" rel="stylesheet"/>
 <style type="text/css">
 #detailmap_infowindow div .window{
 	display: none;
@@ -65,6 +66,7 @@ function mapinit() {
 	initExtent = initExtent.expand(1.5);
 	var urlObject = esri.urlToObject(document.location.href);
 	if(urlObject.query && urlObject.query.webmap){
+		$j("#detailmap").css({ height: "650px" });
 		var b=esri.arcgis.utils.createMap(
 			urlObject.query.webmap,
 			"detailmap",
@@ -110,25 +112,19 @@ function onMapLoaded(){
 		}
 		else{
 			// Use Esri Terrain Basemap
-			//var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
-			var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
-			map.addLayer(basemap);
+			//var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
+			//map.addLayer(basemap);
 
 			//Add Bibb County features
 			if($("#nav-breadcrumb").children().length > 1){
+				/* Bibb GIS disabled
 				//Add Bibb County GIS
 				var bibb = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.co.bibb.ga.us/ArcGISBibb/rest/services/AG4LG/ParcelPublicAccess/MapServer");
 				map.addLayer(bibb);
-
-				// Add custom river polygon
-				setTimeout(function(){
-					var river = [[-83.5983085,32.8171797],[-83.5981339,32.8185682],[-83.5984497,32.8199344],[-83.5999182,32.822609],[-83.6012492,32.8241264],[-83.6024046,32.8249939],[-83.6044705,32.8261653],[-83.6063582,32.827738],[-83.6075192,32.8287364],[-83.6103222,32.8319704],[-83.6134345,32.8344794],[-83.6208757,32.8384531],[-83.6243647,32.8404721],[-83.624993,32.8410675],[-83.6272684,32.8440333],[-83.6290559,32.846071],[-83.6299357,32.8473796],[-83.6322928,32.8497096],[-83.6335141,32.8505418],[-83.6345214,32.8517548],[-83.635626,32.8557509],[-83.6364492,32.8575087],[-83.6376389,32.8589587],[-83.6383959,32.8594922],[-83.6400502,32.8602265],[-83.6430879,32.8604962],[-83.6451844,32.8612803],[-83.6474455,32.8628808],[-83.6522951,32.8651321],[-83.6542949,32.8670339],[-83.6545631,32.8679665],[-83.6544483,32.8689875],[-83.6534911,32.8709816],[-83.6521457,32.8725571],[-83.6513614,32.8731316],[-83.6507338,32.8727434],[-83.6524371,32.8710758],[-83.6534002,32.869276],[-83.6535609,32.8674425],[-83.6527489,32.8664116],[-83.651049,32.8651628],[-83.6469079,32.8634425],[-83.6441122,32.8615988],[-83.6428299,32.861254],[-83.6398495,32.8608901],[-83.6371988,32.8596527],[-83.6362236,32.8585152],[-83.6351456,32.8567754],[-83.6345624,32.8553422],[-83.6341969,32.8536928],[-83.63333,32.8518785],[-83.6324826,32.8508819],[-83.6306362,32.8493992],[-83.6289834,32.847687],[-83.6277472,32.8459519],[-83.6272682,32.8455534],[-83.6254932,32.8428082],[-83.6245098,32.8417159],[-83.6234458,32.8407238],[-83.6224252,32.840069],[-83.6150283,32.8362438],[-83.6121568,32.8345005],[-83.6088691,32.8319275],[-83.6068604,32.8294334],[-83.6053604,32.8280656],[-83.6049373,32.8280304],[-83.6049433,32.8278112],[-83.6044236,32.8271313],[-83.6036563,32.8265697],[-83.6016573,32.8255405],[-83.5999751,32.8242159],[-83.5975878,32.8201657,0],[-83.5983085,32.8171797]];
-					var polygonJson = { "rings": [ river ], "spatialReference": {"wkid":4326} };
-					var polygon = new esri.geometry.Polygon(polygonJson);
-					polygon = esri.geometry.geographicToWebMercator( polygon );
-					var symbol = new esri.symbol.SimpleFillSymbol("solid", new esri.symbol.SimpleLineSymbol("solid", new dojo.Color([0,0,255,0.6]), 1), new dojo.Color([100,100,255,0.35]));
-					map.graphics.add( new esri.Graphic( polygon, symbol ));
-				}, 500);
+				*/
+				// Use MapQuest Open layer
+				var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://otile1.mqcdn.com/tiles/1.0.0/osm" ] });
+				map.addLayer(osmLayer);
 			}
 		}
 	}
