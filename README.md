@@ -19,7 +19,7 @@ You can set up OpenBlock on Amazon EC2 or your own Ubuntu web server. It comes w
 <h3>Mobile Layout</h3>
 Replace "locations" in the OpenBlock URL with "mobile" to see a single-column layout.
 
-<a href="http://ec2-23-20-172-37.compute-1.amazonaws.com/mobile/zones/downtown-industrial-dist/">Mobile Page</a>
+<a href="http://ec2-23-20-172-37.compute-1.amazonaws.com/mobile/zones/downtowntest2/">Mobile Page</a>
 
 <h3>Integrates ArcGIS</h3>
 Cities often use Esri's ArcGIS platform to store and share their geodata. Integration with this platform allows us to combine government data and social media.
