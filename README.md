@@ -1,7 +1,7 @@
 <h2>Blockstagram</h2>
 A downtown development concept based on OpenBlock and ArcGIS Online.
 
-Connect Blockstagram to an ArcGIS FeatureLayer to create a social media brochure for each block, economic development district, or neighborhood board.
+Connect Blockstagram to an ArcGIS Shapefile or FeatureLayer to create a social media brochure for each block, economic development district, or neighborhood board.
 
 Add an official Instagram account and partner services to promote official content.
 
@@ -24,7 +24,7 @@ Replace "locations" in the OpenBlock URL with "mobile" to see a single-column la
 <h3>Integrates ArcGIS</h3>
 Cities often use Esri's ArcGIS platform to store and share their geodata. Integration with this platform allows us to combine government data and social media.
 <br/>
-- (todo) Set up the map of city blocks, neighborhoods, or districts from a Feature Layer / Feature Service.
+- (todo) Set up the map of city blocks, neighborhoods, or districts from a shapefile, Feature Layer, or Feature Service.
 <br/>
 - This version of OpenBlock replaces OpenLayers maps with Esri's ArcGIS JavaScript API.
 <br/>
