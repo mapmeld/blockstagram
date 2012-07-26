@@ -1,24 +1,30 @@
-<h2>OpenBlock-MaconECD</h2>
-A downtown development concept.
-Think of each page as a brochure for that neighborhood.
+<h2>Blockstagram</h2>
+A downtown development concept based on OpenBlock and ArcGIS Online.
+
+Connect Blockstagram to an ArcGIS FeatureLayer to create a social media brochure for each block, economic development district, or neighborhood board.
+
+Add an official Instagram account and partner services to promote official content.
+
+<h3>Case Study</h3>
+Macon: imported Zipcodes, Opportunity Zones, and Tax Abatement Districts
 
 <img src="http://i.imgur.com/FxCtT.png"/>
-
-Macon: imported Zipcodes, Opportunity Zones, and Tax Abatement Districts
 
 <h3>Based on OpenBlock</h3>
 See <a href="http://demo.openblockproject.org">OpenBlock Demo</a>
 and <a href="https://github.com/openplans/openblock">OpenBlock GitHub repo</a>.
 
-<h3>Mobile Layout</h3>
-Began work on a one-column, mobile-friendly layout. Replace "locations" in the URL with "mobile".
+You can set up OpenBlock on Amazon EC2 or your own Ubuntu web server. It comes with several services to import local MeetUps and social media content.
 
-<a href="http://ec2-75-101-172-4.compute-1.amazonaws.com/mobile/zones/downtown-industrial-dist/">Mobile Page</a>
+<h3>Mobile Layout</h3>
+Replace "locations" in the OpenBlock URL with "mobile" to see a single-column layout.
+
+<a href="http://ec2-23-20-172-37.compute-1.amazonaws.com/mobile/zones/downtown-industrial-dist/">Mobile Page</a>
 
 <h3>Integrates ArcGIS</h3>
-Cities often use Esri's ArcGIS platform to store and share their geodata.
+Cities often use Esri's ArcGIS platform to store and share their geodata. Integration with this platform allows us to combine government data and social media.
 <br/>
-Integration with that platform allows us to combine government data and social media.
+- (todo) Set up the map of city blocks, neighborhoods, or districts from a Feature Layer / Feature Service.
 <br/>
 - This version of OpenBlock replaces OpenLayers maps with Esri's ArcGIS JavaScript API.
 <br/>
@@ -26,8 +32,6 @@ Integration with that platform allows us to combine government data and social m
 <br/>
 - Import an ArcGIS Online web map onto any neighborhood view by adding &webmap=[ID] to any page URL
 <img src="http://i.imgur.com/o7ZBv.png"/>
-<br/>
-- Restyle with watercolor maps by adding &watercolor=true to any page URL
 
 <h3>Install</h3>
 This repo contains changes made to the Amazon EC2 AMI.
