@@ -5,8 +5,8 @@ Connect Blockstagram to an ArcGIS FeatureLayer to create a social media brochure
 
 Add an official Instagram account and partner services to promote official content.
 
-<h3>Case Study</h3>
-Macon: imported Zipcodes, Opportunity Zones, and Tax Abatement Districts
+<h3>Sample</h3>
+Macon, GA: imported Zipcodes, Opportunity Zones, and Tax Abatement Districts for downtown
 
 <img src="http://i.imgur.com/FxCtT.png"/>
 
@@ -33,6 +33,13 @@ Cities often use Esri's ArcGIS platform to store and share their geodata. Integr
 - Import an ArcGIS Online web map onto any neighborhood view by adding &webmap=[ID] to any page URL
 <img src="http://i.imgur.com/o7ZBv.png"/>
 
+<h3>Ideas</h3>
+- Include official Flickr accounts
+<br/>
+- Better control over adding anonymous users photos
+<br/>
+- Only add photos with faces using PyFaceDetect
+
 <h3>Install</h3>
 This repo contains changes made to the Amazon EC2 AMI.
 
@@ -45,7 +52,7 @@ Use these commands to quickly replace a file on EC2:
 
     nano base.html
 
-[paste in the source code]
+[paste in the new code for base.html]
 
 [Ctrl X]<br/>
 [Y]<br/>
