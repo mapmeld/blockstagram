@@ -8,7 +8,7 @@ Add an official Instagram account and partner services to promote official conte
 <h3>Sample</h3>
 Macon, GA: imported Zipcodes, Opportunity Zones, and Tax Abatement Districts for downtown
 
-<img src="http://i.imgur.com/FxCtT.png"/>
+<img src="http://i.imgur.com/E3yDA.png"/>
 
 <h3>Based on OpenBlock</h3>
 See <a href="http://demo.openblockproject.org">OpenBlock Demo</a>

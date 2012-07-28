@@ -1,0 +1,1170 @@
+.selfclear:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.selfclear {
+    display: block;
+}
+.nobreak {
+    white-space: nowrap;
+}
+.hidden {
+    display: none;
+}
+body, html {
+    height: 100%;
+}
+
+body, input, textarea, button {
+    color: #333333;
+    font: 15px/22px Verdana,sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    clear: both;
+    font-weight: bold;
+}
+h1, h2 {
+    font-size: 20px;
+    margin: 22px 0;
+    text-shadow: 1px 1px 0 #FFFFFF;
+}
+h3 {
+    font-size: 20px;
+    margin: 22px 0 10px;
+}
+h4 {
+    font-size: 18px;
+    font-weight: normal;
+    margin: 10px 0 5px;
+    text-transform: uppercase;
+}
+h5 {
+    font-size: 17px;
+    font-weight: normal;
+    margin: 10px 0 5px;
+    text-transform: uppercase;
+}
+h6 {
+    font-weight: normal;
+    margin: 10px 0 5px;
+    text-transform: uppercase;
+}
+p {
+    margin-bottom: 18px;
+}
+ul {
+    margin: 0 0 18px 2.5em;
+}
+ol {
+    margin: 0 0 18px 2.5em;
+}
+ul {
+    list-style: disc outside none;
+}
+ol {
+    list-style-type: decimal;
+}
+ol ol {
+    list-style: upper-alpha outside none;
+}
+ol ol ol {
+    list-style: lower-roman outside none;
+}
+ol ol ol ol {
+    list-style: lower-alpha outside none;
+}
+ul ul, ol ol, ul ol, ol ul {
+    margin-bottom: 0;
+}
+dl {
+    margin: 0 1.5em;
+}
+dt {
+    font-weight: bold;
+}
+dd {
+    margin-bottom: 18px;
+}
+strong {
+    font-weight: bold;
+}
+cite, em, i {
+    font-style: italic;
+}
+blockquote {
+    background: url("img/blockquote.png") no-repeat scroll 0 0 transparent;
+    color: #666666;
+    font-style: italic;
+    margin: 0 40px 40px 0;
+    padding-left: 40px;
+}
+blockquote p {
+    margin-bottom: 12px;
+}
+blockquote em, blockquote i, blockquote cite {
+    font-style: normal;
+}
+blockquote cite {
+    font-size: 13px;
+}
+blockquote cite em {
+    font-style: italic;
+}
+pre {
+    font: 11px/18px Monaco,monospace;
+    margin-bottom: 18px;
+}
+code {
+    font: 11px Monaco,monospace;
+}
+abbr, acronym {
+    border-bottom: 1px dotted #333333;
+    cursor: help;
+}
+ins {
+    text-decoration: none;
+}
+sup, sub {
+    height: 0;
+    line-height: 1;
+    position: relative;
+    vertical-align: baseline;
+}
+sup {
+    bottom: 1ex;
+}
+sub {
+    top: 0.5ex;
+}
+blockquote.left {
+    float: left;
+    margin-left: 0;
+    margin-right: 20px;
+    text-align: right;
+    width: 33%;
+}
+blockquote.right {
+    float: right;
+    margin-left: 20px;
+    margin-right: 0;
+    text-align: left;
+    width: 33%;
+}
+p, ul, ol, dd, pre {
+    margin-bottom: 22px;
+}
+pre, code {
+    font: 14px/22px Monaco,monospace;
+}
+blockquote {
+}
+table {
+    border-color: #C7BAAF;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    font-size: 13px;
+    line-height: 18px;
+    margin: 0 0 22px;
+    text-align: left;
+}
+caption {
+    text-align: left;
+}
+tr {
+    border-bottom: 1px solid #C7BAAF;
+}
+th, td {
+    padding: 6px 10px;
+}
+hr {
+    background-color: #C7BAAF;
+    border-color: -moz-use-text-color #FFFFFF;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    color: #C7BAAF;
+    height: 2px;
+    margin-bottom: 22px;
+}
+
+a:link {
+    color: #007FBF;
+}
+a:visited {
+    color: #007FBF;
+}
+a:active, a:hover {
+    color: #0055CC;
+}
+a:focus {
+    color: red;
+}
+
+
+#globalnav {
+    font-size: 14px;
+    text-align: left;
+}
+#globalnav ul {
+    background-color: #A3C1CC;
+    display : inline-block;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0 0.4em;
+}
+#globalnav ul li {
+    float: left;
+}
+#globalnav ul li a:link, #globalnav ul li a:visited {
+    color: #666666;
+    float: left;
+    padding: 6px 10px;
+    text-decoration: none;
+    text-shadow: 1px 1px 0 #DDDDDD;
+}
+#globalnav ul li a:hover, #globalnav ul li a:focus {
+    color: #333333;
+    text-shadow: 1px 1px 0 #DDDDDD;
+}
+#globalsearch {
+    float: right;
+}
+#globalsearch label {
+    color: #666666;
+    font-size: 14px;
+    font-weight: bold;
+}
+#globalsearch #searchinput {
+    color: #888888;
+    font-size: 14px;
+    padding: 5px 8px;
+    width: 320px;
+}
+#globalsearch button {
+    background-color: #A3C1CC;
+    border: 0 none;
+    color: #666666;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 6px 10px;
+    text-shadow: 1px 1px 0 #DDDDDD;
+}
+#globalsearch button:hover {
+    cursor: pointer;
+}
+#userlinks {
+    font-size: 12px;
+    padding: 10px 0;
+
+float : right;
+
+}
+
+
+/* #################################### New Styles #################################### */
+
+body {
+background : transparent url(/styles/bg.png) top left;
+font : normal normal normal 1em/1.4em Georgia, Sans-serif;
+min-width: 900px;
+}
+
+a {
+color : #0069a9;
+}
+
+#container {
+background : transparent url(/styles/heading-bg.jpg) top left repeat-x;
+}
+
+#header, #main {
+	width : 900px;
+	margin : 0 auto;	
+}
+
+#main {
+    clear: both;
+    padding: 20px 0 0 0;
+
+}
+
+#header h1 {
+    font-size: 36px;
+    margin: 0;
+float : left;
+width : 500px; 
+padding : 20px 0 0 0;
+height : 58px; /* 101px with padding */
+overflow : hidden;
+font-weight : normal;
+text-shadow: 0 1px 0 #ffffff;
+
+}
+
+#header h1 a {
+color : #343434;
+    text-decoration: none;
+}
+#header h1 a:active, #header h1 a:hover {
+    color: #333333;
+}
+#header h1 a:focus {
+    color: red;
+}
+#header p {
+    margin: 0;
+}
+
+
+#globalsearch label {
+	display : none;
+}
+
+ul#nav-breadcrumb {
+height : 34px;
+/* clear : both; */
+float : left;
+}
+
+ul#nav-breadcrumb, #nav-breadcrumb li {
+list-style-type : none;
+display : inline-block;
+padding 0;
+margin : 0;
+background-color : #f8f6f2;
+}
+
+#nav-breadcrumb li {
+background : transparent url(/styles/breadcrumb-separator.png) top right no-repeat;
+padding : 5px 30px 7px 20px;
+}
+
+#nav-breadcrumb li a {
+text-decoration : none;
+color : #3d799e;
+}
+
+#nav-breadcrumb li a:hover {
+color : #007FBF;
+}
+
+
+#nav-location {
+width : 394px;
+float : right;
+}
+
+#nav-location h2 {
+margin-bottom : .5em;
+display: inline-block;
+}
+
+#nav-location ul {
+color : #878787;
+list-style-type : none;
+padding : 0;
+margin : 0;
+}
+
+#nav-location ul li a {
+text-decoration : none;
+display : block;
+padding : .5em .5em;
+border-top : 1px solid #ccc;
+}
+
+#nav-location ul li a:hover {
+background-color : #f8f6f2;
+}
+
+#content .subscribe-links, 
+#nav-location .subscribe-links {
+margin-top : 1em;
+float : right;
+clear : right;
+width : 394px;
+}
+
+#content .subscribe-links p, 
+#nav-location .subscribe-links p {
+border-radius : 8px;
+-moz-border-radius : 8px;
+padding : .1em .6em;
+background : #e1dbd6;
+font-size : 13px;
+border : 1px solid #cccbc9;
+}
+
+.subscribe-links p a {
+margin-left : 3em;
+}
+
+.subscribe-links p a {
+color : #3D799E;
+text-decoration : none;
+}
+
+.subscribe-links p a:hover {
+color : #2C7CAE;
+text-decoration : underline
+}
+
+#detailmap {
+width: 480px;
+height: 255px
+}
+
+
+.fullpage #detailmap {
+    width: 100%;
+    height: 480px;
+}
+
+#map_date_range {
+    margin-bottom: 20em;
+    float: right;
+}
+
+
+#mapwrapper {
+margin-bottom : .5em;
+border : 1px solid #cac8c6;
+}
+
+#mapwrapper.fullpage {
+}
+
+#map_headlines {
+    width: 250px;
+    float: left;
+    margin: 0;
+    padding: 0;
+    
+}
+
+#map_headlines .map-item-list {
+    height: 420px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#map_headlines .map-item-list li {
+    height: 70px;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #a0a0a0;
+    overflow: hidden;
+}
+
+#map_headlines .map-item-list li.no-headlines {
+    height: 400px;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    border-bottom: none;
+    overflow: hidden;
+}
+
+
+#map_headlines .map-item-list li img {
+    width: 20px;
+    padding-right: 5px;
+    float: left;
+}
+
+#map_headlines .map-item-list li .title {
+    font-size: 85%;
+    line-height: 1.1em;
+    margin-bottom: .2em;
+}  
+
+
+#map_headlines .map-item-list li .location,
+#map_headlines .map-item-list li .category, 
+#map_headlines .map-item-list li .date {
+    font-size: 80%;
+    line-height: 1.1em;
+}
+
+#map_headlines .map-item-list li .location {
+    clear: both;
+}
+
+
+
+
+
+
+#content {
+width : 480px;
+float : left;
+}
+
+
+#content h2, 
+#sidebar h2 {
+margin-top : 2em;
+font-weight : normal;
+border-bottom : 1px solid #666;
+padding-bottom : .25em;
+}
+
+#content h4 {
+margin : 0;
+}
+
+
+
+#content p {
+font-size : .9em;
+}
+
+#contentheader h1 {
+margin : .25em 0 .5em 0;
+font-size : 1.5em;
+}
+
+ul.nav-view {
+margin : 0;
+padding : 0;
+list-style-type : none;
+display : inline-block;
+}
+
+ul.nav-view li {
+float : left;
+border : 1px solid #c8c7c5;
+border-width : 1px 1px 1px 0; 
+padding : 4px 8px 3px 8px;
+font-size : 14px;
+}
+
+ul.nav-view li a, ul.nav-view li a:visited {
+text-decoration : none;
+color : #aaaaaa;
+}
+
+ul.nav-view li a:hover {
+color : #2c7cae;
+}
+
+
+ul.nav-view li.selected {
+background-color : #e1dbd6;
+}
+
+ul.nav-view li:first-child {
+color : #2c7cae;
+border-top-left-radius: 5px;
+-moz-border-radius-topleft: 5px;
+border-bottom-left-radius: 5px;
+-moz-border-radius-bottomleft: 5px;
+border-width : 1px;
+}
+
+
+ul.nav-view li:last-child {
+border-top-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+border-bottom-right-radius: 5px;
+-moz-border-radius-bottomright: 5px;
+}
+
+ul.nav-view li.selected {
+background-color : #e1dbd6;
+}
+
+form.select-filter {
+float : right;
+}
+
+
+#place-detail-content .visible ul {
+list-style-type : none;
+padding : 0;
+margin : 0;
+}
+
+#place-detail-content .visible ul li, .newsitem {
+padding : 1em 0 0 0;
+border-top : 1px solid #e2e2e2;
+}
+
+#place-detail-content h4 {
+font-size : 1em;
+color : #000;
+text-transform : none;
+font-weight : bold;
+}
+
+#place-detail-content .location, .newsitem .location {
+display : block;
+text-transform : uppercase;
+font-size : .75em;
+}
+
+#place-detail-content .title, .newsitem .title {
+display : block;
+margin-bottom : .8em;
+}
+
+#place-detail-content .title a, .newsitem .title a {
+text-decoration : none;
+font-weight : normal;
+}
+
+#sidebar {
+float : right;
+  width: 392px;
+}
+
+#sidebar .sidebar-block {
+}
+
+
+.info .date {
+  font-weight: bold;
+}
+
+/* Popups */
+
+div li span.location {
+    display: block;
+}
+div li span.popupnav {
+    display: block;
+}
+div.popupnav {
+    clear: both;
+}
+
+.openblockFramedCloudPopupContent {
+    font-size: 12px;
+    overflow: hidden;
+    margin: 0px 6px 6px 12px;
+    padding: 0;
+}
+
+.olPopup .newsitem {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.openblockFramedCloudPopupContent .location {
+    display: inline;
+    font-size: 12px;
+    text-transform: none;
+}
+
+
+/* Rich Map Popups */
+
+.popup-content .title {
+    font-size: 14px;
+} 
+
+.popup-content .title a {
+    text-decoration: none;
+}
+
+.popup-nav {
+    clear: both;
+}
+
+/* #################################### Timeline ############################ */
+
+.place-detail-timeline .info .date {
+  display: none;
+}
+
+/* #################################### Overview Page #################################### */
+
+.place-detail-overview #nearby {
+display : none;
+}
+
+.place-detail-overview #content {
+width : 100%; /* 900px */
+}
+
+
+.place-detail-overview #content .module {
+width : 435px;
+float : left;
+
+}
+
+.place-detail-overview #content .odd {
+margin-right : 30px;
+}
+
+
+#content ul.tabs, #content ul.tabs li {
+list-style-type : none;
+padding : 0;
+margin : 0;
+}
+
+#content ul.tabs {
+margin-bottom : 1.5em;
+clear : both;
+display : inline-block;
+}
+
+#content ul.tabs li {
+float : left;
+border : 1px solid #c8c7c5;
+border-width : 1px 1px 1px 0; 
+background-color : #f7f5f1;
+}
+
+#content ul.tabs li.current {
+background-color : #fff;
+}
+
+#content ul.tabs li:first-child {
+color : #2c7cae;
+border-top-left-radius: 5px;
+-moz-border-radius-topleft: 5px;
+border-bottom-left-radius: 5px;
+-moz-border-radius-bottomleft: 5px;
+border-width : 1px;
+}
+
+#content ul.tabs li:last-child {
+border-top-right-radius: 5px;
+-moz-border-radius-topright: 5px;
+border-bottom-right-radius: 5px;
+-moz-border-radius-bottomright: 5px;
+
+}
+
+#content ul.tabs li a {
+text-decoration : none;
+padding : .15em .5em;
+color : #aaa;
+}
+
+#content ul.tabs li.current a {
+color : #464444;
+}
+
+
+#content ul.tabs li a:hover {
+color : #464444;
+}
+
+.newsitemlist, .newsitem {
+list-style-type : none;
+margin : 0;
+padding : auto 0;
+}
+
+.pane .module-footer a {
+margin-right : 1em;
+float : left;
+border : 1px solid #C8C7C5;
+padding : .05em .6em;
+font-size : .9em;
+border-radius : 5px;
+-moz-border-radius : 10px;
+text-decoration : none;
+background-color : #edebe6;
+color : #4d6a24;
+}
+
+.pane .module-footer a:hover {
+background-color : transparent;
+color : #589500;
+}
+
+
+.pane .module-footer {
+border-top : 1px solid #e1e1e1;
+width : 100%;
+padding-top : 1em;
+margin-bottom : 2em;
+float : left;
+}
+
+
+/* #################################### Schema Filter #################################### */
+
+.schema-filter #detailmap { 
+width: 392px;
+}
+
+.schema-filter #content {
+width : 100%;
+}
+
+.schema-filter #maintext {
+width : 480px;
+float : left;
+}
+
+.schema-filter #mapwrapper {
+float : right;
+}
+.schema-filter a.large-map-link {
+    float: right;
+    clear: right;
+    font-size: 80%;
+    text-decoration: none;
+}
+
+#schemanav {
+border-bottom : 1px solid #E2E2E2;
+margin-bottom : 2em;
+}
+
+
+#schemanav ul, 
+#schemanav li {
+margin : 0;
+padding : 0;
+list-style-type : none;
+}
+
+#schemanav h4 {
+text-transform: none;
+}
+
+#schemanav li {
+padding : .4em;
+border : 1px solid blue; 
+float : left;
+margin-bottom : .5em;
+}
+
+
+#schemanav ul {
+margin-bottom : .5em;
+clear : both;
+display : inline-block;
+}
+
+#schemanav ul li {
+    -moz-border-radius: 10px 10px 10px 10px;
+    background-color: #EDEBE6;
+    border: 1px solid #C8C7C5;
+    color: #4D6A24;
+    float: left;
+    font-size: 0.9em;
+    margin-right: 1em;
+    padding: 0.05em 0.6em;
+    text-decoration: none;
+}
+
+
+#schemanav ul li a {
+text-decoration : none;
+padding : .15em .5em;
+color : #aaa;
+}
+
+#schemanav ul li a:hover {
+color : #e82100;
+}
+
+#content #schemanav h2 {
+margin-top : 1em;
+}
+
+
+#schemanav .filtergroup {
+border : 1px solid #dbdbdb;
+background-color : #EDEBE6;
+padding : .5em;
+}
+
+#schemanav .filtergroup p {
+margin : 0;
+}
+
+
+#schemanav .filtergroup h3 {
+margin-top : 0;
+}
+
+.schema-filter #maintext ul {
+margin : 0;
+}
+
+.schema-filter #maintext h3 {
+margin-top : 0;
+}
+
+
+
+/* #################################### Schema Detail #################################### */
+
+.schema-detail #content {
+width : 624px;
+}
+
+.schema-detail #content h1 {
+margin : 0;
+}
+
+.schema-detail #content h2 {
+margin : 1.5em 0 1em 0;
+}
+
+.schema-detail #content dl {
+margin : 0;
+}
+
+
+.schema-detail #schemanav {
+float : none;
+}
+
+
+.schema-detail table.datechart a:link {
+text-decoration : none;
+}
+
+.schema-detail table.datechart td,
+.schema-detail table.datechart th {
+vertical-align : bottom;
+padding : 0;
+border : 1px solid #d3d3d3;
+border-width : 0 1px;
+}
+
+.schema-detail table.datechart th  {
+text-align : center;
+}
+
+/* Basic styles for date charts. For more on creating CSS charts, see: http://www.alistapart.com/articles/accessibledatavisualization/ */
+.datechart .index { 
+display: block; 
+position: relative; 
+height: 100px; 
+text-decoration: none; 
+}
+
+.datechart .bar { 
+background: #b9aca2; 
+width: 100%; 
+display: block; 
+position: absolute; 
+bottom: 0; 
+text-indent: -9999px; 
+overflow: hidden; 
+}
+
+.datechart .day { 
+width : 20px;
+vertical-align: top;
+}
+
+#location-neighborhoods table, 
+#location-zipcodes table {
+width : 100%;
+background-color : #F7F5F1;
+}
+
+
+.schema-detail #location-neighborhoods td.label, 
+.schema-detail #location-neighborhoods td.percent, 
+.schema-detail #location-neighborhoods td.count, 
+.schema-detail #location-zipcodes td.label, 
+.schema-detail #location-zipcodes td.percent, 
+.schema-detail #location-zipcodes td.count {
+padding : 0;
+text-align : center;
+}
+
+.schema-detail #location-neighborhoods td.label, 
+.schema-detail #location-zipcodes td.label {
+text-align : left;
+}
+
+.schema-detail #location-neighborhoods td.count, 
+.schema-detail #location-zipcodes td.count {
+border : 1px solid #C7BAAF;
+border-width : 0 1px;
+
+}
+
+.schema-detail .label {
+padding : 0;
+margin : 0;
+}
+
+.schema-detail .label a {
+text-decoration : none;
+z-index : 10;
+}
+
+
+.schema-detail .label .name {
+padding : 5px ;
+height : 10px;
+display : block;
+margin : 0;
+}
+
+.schema-detail .label .name .bar {
+background-color : #ccc;
+display : block;
+
+z-index : -10;
+margin-top : -23px;
+height : 23px;
+margin-left : -5px;
+}
+
+
+.schema-detail .count, 
+.schema-detail .percent {
+width : 10%;
+}
+
+
+
+/* #################################### Homepage #################################### */
+
+.homepage #nav-location {
+width : 100%;
+}
+
+.homepage #nav-location #intro-explore {
+float : right;
+width: 392px;
+}
+
+.homepage #mapwrapper { 
+float: left; 
+}
+
+.homepage #public-records ul {
+list-style-type : none;
+padding : 0;
+margin : 0 0 1em 0;
+}
+
+.homepage #public-records ul li {
+margin-bottom : .5em;
+}
+
+#homepage-search {
+    margin-bottom : 1em;
+    background-color: #F0F5FF;
+    border: 1px solid #CAC8C6;
+    clear: both;
+    padding: 8px;
+    overflow: hidden;
+}
+
+#homepage-search h2 {
+margin : .5em 0 .4em 0;
+}
+
+#homepage-about p {
+margin : 1em 0 0 0;
+}
+
+#intro-search h2 {
+margin-top : 1em;
+}
+
+img.schema-icon {
+  height: 24px; width: 24px;
+  padding: 0px; margin: 0px;
+}
+
+div.schema-colorsample {
+  display: inline-block;
+  height: 20px; width: 20px;
+  padding: 0px; margin: 3px;
+  border: 1px solid #CCCCCC;
+}
+
+/* messages */
+.messages .info {
+color: #00B000;
+}
+.messages .error {
+color: #C53300
+}
+
+/* ########################### Neighbor News #################################### */
+
+.neighbornews #detailmap {
+    width: 392px;
+}
+
+.geocoder-result .lon,
+.geocoder-result .lat {
+    display: none;
+}
+
+div.geocoder-result {
+   padding: .75em;
+   border: 1px solid #a0a0a0; 
+}
+
+a.add-content-link {
+    text-decoration: none;
+    padding: .75em;
+    border: 1px solid #a0a0a0;
+}
+
+div.selected-result {
+    background-color: #d0d0d0;
+}
+
+form.neighbornews {
+    width: 100%;
+}
+
+form.neighbornews label {
+    display: block;
+    margin-top: 1em;
+}
+
+form.neighbornews div.form-input input {
+    width: 75%;
+}
+
+form.neighbornews textarea {
+    width: 100%;
+}
+
+.map_note {
+    font-size: 80%;
+    font-color: #cfcfcf;
+}
+
+form.neighbornews .form-error {
+    font-size: 80%;
+    color: #ff2020;
+}
+
+form.neighbornews .form-help {
+    font-size: 80%;
+    color: #8f8f8f;
+}
+
+ul.errorlist {
+    margin-left: 0;
+    list-style-type: none;
+}
+
+
+/* ##################### Comments ########################### */
+
+.comment-author, .comment-date {
+    font-size: 80%;
+    font-color: #cfcfcf;
+}
+
+.comment {
+    margin-bottom: 1em;
+}

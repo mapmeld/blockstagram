@@ -1,0 +1,94 @@
+{% extends "base.html" %}{% comment %} -*- mode: django-html; tab-width: 4 -*- {% endcomment %}
+{% load eb humanize mapping %}
+
+{% block fulltitle %}InstaBlock{% endblock %}
+
+{% block content %}
+		<div id="homepage-search" style="overflow:hidden;padding:5px;">
+		  <div style="width:1000px;height:230px;">
+			<h2>Represent your block:</h2>
+			<img src="http://distilleryimage9.s3.amazonaws.com/82ae1842d7b411e197a81231381018fa_7.jpg" width="170" height="170"/>
+			<img src="http://distilleryimage11.s3.amazonaws.com/0992ca44d6a511e1b62322000a1e8a75_7.jpg" width="170" height="170"/>
+			<img src="http://distilleryimage2.s3.amazonaws.com/8ec49920d5f311e1a4d022000a1e95fe_7.jpg" width="170" height="170"/>
+			<img width="170" height="170" src="http://distilleryimage11.s3.amazonaws.com/441157e8d68811e189de22000a1e95dd_7.jpg"/>
+			<img width="170" height="170" src="http://distilleryimage9.s3.amazonaws.com/e5e89ec8d43f11e1a953123138104e29_7.jpg"/>
+			<br/>
+			<a href="#" style="margin-left:15px;">More photos of Macon</a>
+		  </div>
+		</div><!--/ #homepage-search -->
+
+		<div id="nav-location">
+
+		<div id="mapwrapper">
+		  <script type="text/javascript">
+		  {% autoescape off %}
+		  
+		  function loadMap() {
+  		  /*var config = {{map_configuration}};
+        config.center = [{{default_lon}}, {{default_lat}}];
+        config.zoom = {{default_zoom}};
+        return new OBMap(config);        */
+  		}
+  		
+  		{% endautoescape %}
+		  </script>
+		{% include "richmaps/richmap.html" %}
+		</div><!-- end mapwrapper -->
+
+		<div id="intro-explore">
+			<h2>Locations</h2>
+			<ul class="location-type-list">
+				{% for location_type in location_type_list %}
+					<li><a href="{{ location_type.url }}"><strong class="number">{{ location_type.count|intcomma }}</strong> {{ location_type.plural_name|capfirst }}</a></li>
+				{% endfor %}
+				<li><a href="/streets/"><strong class="number">{{ street_count|intcomma }}</strong> Streets</a></li>
+			</ul>
+		</div><!--/ #intro-explore-->
+	</div><!-- end nav-location -->
+
+	<div id="content">
+	<div id="frontpage-text">
+
+	<div id="public-records">
+		{% if non_empty_date_charts %}
+		<h2>What's Happening</h2>
+		<p>New in the last {{ num_days }} days</p>
+		<ul>
+			{% for chart in non_empty_date_charts %}
+			<li>
+				{% map_icon_img chart.schema %}
+				<strong>{{ chart.total_count|intcomma }}</strong> <a href="{{ chart.schema.url }}">{% filter capfirst %}{% schema_plural_name chart.schema chart.total_count %}{% endfilter %}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+		{% if empty_date_charts %}
+		<ul>Older: {% for chart in empty_date_charts %}
+            <li><a href="{{ chart.schema.url }}">{% map_icon_img chart.schema %}{{ chart.schema.plural_name|capfirst }}</a>
+            </li>{% endfor %}
+        </ul>
+		{% endif %}
+	</div><!--/ #public-records -->
+	<div id="more">
+    {% if more_schemas %}
+		<h2>More news</h2>
+		<ul>
+		{% for schema in more_schemas %}
+			<li><a href="{{ schema.url }}">{% map_icon_img schema %}{{ schema.plural_name|capfirst }}</a></li>
+		{% endfor %}
+		</ul>
+    {% endif %}
+    </div><!--/ #more -->
+
+    </div><!-- / #frontpage-text -->
+
+</div><!--/ #content -->
+
+<div id="sidebar">
+  <!-- begin block extracontent -->
+  {% block extracontent %}
+  {% endblock %}
+  <!-- end block extracontent -->
+</div><!--/ #sidebar -->
+
+{% endblock %}

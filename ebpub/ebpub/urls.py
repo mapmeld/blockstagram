@@ -53,7 +53,9 @@ urlpatterns += patterns('',
     url(r'^locations/([-_a-z0-9]{1,32})/$', views.location_type_detail, name='ebpub-loc-type-detail'),
     url(r'^locations/([-_a-z0-9]{1,32})/([-_a-z0-9]{1,32})/$', views.place_detail_timeline, {'place_type': 'location', 'show_upcoming': False}, name="ebpub-location-recent"),
 
-    url(r'^mobile/([-_a-z0-9]{1,32})/([-_a-z0-9]{1,32})/$', views.place_detail_timeline_mobile, {'place_type': 'location', 'show_upcoming': False}, name="ebpub-location-recent"),
+    # url(r'^mobile/([-_a-z0-9]{1,32})/([-_a-z0-9]{1,32})/$', views.place_detail_timeline_mobile, {'place_type': 'location', 'show_upcoming': False}, name="ebpub-location-recent"),
+    url(r'^mapless/([-_a-z0-9]{1,32})/([-_a-z0-9]{1,32})/$', views.place_detail_timeline_mapless, {'place_type': 'location', 'show_upcoming': False}, name="ebpub-mapless-recent"),
+    url(r'^foursquare*$', views.foursquare_api_call, {'place_type': 'location', 'show_upcoming': False}, name="ebpub-4sq-api-call"),
 
     url(r'^locations/([-_a-z0-9]{1,32})/([-_a-z0-9]{1,32})/upcoming/$', views.place_detail_timeline, {'place_type': 'location', 'show_upcoming': True}, name="ebpub-location-upcoming"),
     url(r'^locations/([-_a-z0-9]{1,32})/([-_a-z0-9]{1,32})/overview/$', views.place_detail_overview, {'place_type': 'location'}, name="ebpub-location-overview"),

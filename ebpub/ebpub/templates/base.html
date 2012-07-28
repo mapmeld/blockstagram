@@ -3,9 +3,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
-<title>{% block fulltitle %}{% block title %}{% endblock %} | {% block city_title %}OpenBlock{% endblock %}{% endblock fulltitle %}</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="robots" content="noarchive">
+<title>{% block fulltitle %}{% block title %}{% endblock %} | {% block city_title %}InstaBlock{% endblock %}{% endblock fulltitle %}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="robots" content="noarchive"/>
 <link rel="home" title="Home" href="{% url ebpub-homepage %}">
 
 {% slimall %}
@@ -20,6 +20,7 @@
 // with OpenLayers and we end up with the $ function from OpenLayers. 
 // But a lot of existing everyblock code expects $j instead of $
 var $j = $;
+var LastMapWidth = "";
 </script>
 {% slimall %}
 <script src="/scripts/ob-jquery-csrf.js" type="text/javascript" charset="utf-8"></script>
@@ -51,7 +52,7 @@ dojo.require("esri.layers.agstiled");
 dojo.require("esri.layers.graphics");
 dojo.require("esri.layers.FeatureLayer");
 dojo.require("esri.arcgis.utils");
-dojo.require("esri.layers.KMLLayer");
+//dojo.require("esri.layers.KMLLayer");
 
 var map, incidentsGraphicsLayer, initExtent;
 
@@ -111,6 +112,10 @@ function onMapLoaded(){
 			map.addLayer(osmLayer);
 		}
 		else{
+			// Use MapQuest Open layer
+			var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://otile1.mqcdn.com/tiles/1.0.0/osm" ] });
+			map.addLayer(osmLayer);
+
 			// Use Esri Terrain Basemap
 			//var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
 			//map.addLayer(basemap);
@@ -120,18 +125,16 @@ function onMapLoaded(){
 				/* Bibb GIS disabled
 				//Add Bibb County GIS
 				var bibb = new esri.layers.ArcGISTiledMapServiceLayer("http://gis.co.bibb.ga.us/ArcGISBibb/rest/services/AG4LG/ParcelPublicAccess/MapServer");
-				map.addLayer(bibb);
-				*/
-				// Use MapQuest Open layer
-				var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://otile1.mqcdn.com/tiles/1.0.0/osm" ] });
-				map.addLayer(osmLayer);
+				map.addLayer(bibb); */
 			}
 		}
 	}
-
-	dojo.connect(map, "onLoad", function(){
-		dojo.connect(dijit.byId('map'), 'resize', map,map.resize);
-	});
+	setInterval(function(){
+		if(map.loaded && map.container.offsetWidth != LastMapWidth){
+			map.resize();
+			LastMapWidth = map.width;
+		}
+	}, 500);
 	loadMap();
 }
 dojo.addOnLoad(mapinit);
@@ -178,13 +181,19 @@ ul#nav-breadcrumb, #nav-breadcrumb li{
 	color:#fff;
 	background-color:#000;
 }
+#mapwrapper{
+	width: 100%;
+}
+#detailmap{
+	width: 100%;
+}
 </style>
 
 </head>
 <body {% if bodyid %}id="{{bodyid}}"{% endif %} {% if bodyclass %}class="{{bodyclass}}"{% endif %}>
   <div id="container">
-	<div id="header">
-		<h1><a href="{% url ebpub-homepage %}">OpenBlock: {% METRO_NAME %}</a></h1>
+	<div id="header" style="padding:15px;">
+		<h1 style="width:none;"><a href="{% url ebpub-homepage %}">InstaBlock: {% METRO_NAME %}</a></h1>
 		<div id="globalnav">
 		    <!--
 			<ul>
@@ -219,7 +228,7 @@ ul#nav-breadcrumb, #nav-breadcrumb li{
 		{% endblock breadcrumbs %}
 		<!-- end block breadcrumbs -->
 	</div><!-- / #header -->
-	<div id="main">
+	<div id="main" style="width:85%;">
 	  <!-- begin block messages -->
 		{% block messages %}
 	    {% if messages %}

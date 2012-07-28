@@ -11,6 +11,11 @@ Required variables: nearby_locations, place, is_block
 
 <!-- begin block content -->
 {% block content %}
+
+<!-- begin block place_content -->
+{% block place_content %}{% endblock %}
+<!-- end block place_content -->
+
 <div id="nav-location">
 	<!-- begin block map -->
 	{% block map %}
@@ -21,7 +26,7 @@ function loadMap() {
 	$j("#place-detail-content").html($j("#place-detail-content").html() + "<h2>Photos</h2>" );
 
 	incidentPointSymbol = new esri.symbol.PictureMarkerSymbol({
-  		"url":"http://i.imgur.com/dS1At.png",
+  		"url":"http://i.imgur.com/vlLh1.png",
   		"height":24,
   		"width":20,
 		"yoffset":10,
@@ -92,7 +97,6 @@ function mapNow(d){
 	pushFlickr(viewExtent);
 	pushPanoramio(viewExtent);
 	pushInstagram(viewExtent);
-
 	polygon = esri.geometry.geographicToWebMercator( polygon );
 	var loc = new esri.Graphic( polygon,  new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID,
 	 	new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
@@ -193,7 +197,6 @@ function pushInstagram(bounds){
 	var s = document.createElement('script');
 	var lat = bounds.getCenter().y;
 	var lng = bounds.getCenter().x;
-	//s.src = "http://api.flickr.com/services/rest/?bbox=" + bounds.xmin + "," + bounds.ymin + "," + bounds.xmax + "," + bounds.ymax + "&extras=geo,owner_name,date_taken&per_page=60&tags=&method=flickr.photos.search&api_key=8f28e831de92bb79fcb9ec299227020a&has_geo=1&page=1&format=json&jsoncallback=loadFlickr&min_taken_date=2011-1-1";
 	s.src = "https://api.instagram.com/v1/media/search?lat=" + lat + "&lng=" + lng + "&client_id=4a0e2ae23b0149249e3c2b2d7f5fd037&callback=loadInstagram&distance=500";
 	s.type = "text/javascript";
 	document.body.appendChild(s);
@@ -264,7 +267,4 @@ function loadInstagram(response){
 	{% endif %}
 
 </div><!--/ #nav-location -->
-<!-- begin block place_content -->
-{% block place_content %}{% endblock %}
-<!-- end block place_content -->
 {% endblock content %}

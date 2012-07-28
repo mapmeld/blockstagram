@@ -24,6 +24,7 @@ Required variables: nearby_locations, place, is_block
 	<div id="mapwrapper" class="claro">
 		<script type="text/javascript">
 		{% autoescape off %}
+var incidentPointSymbol, businessPointSymbol;
 function loadMap() {
 	// set up photo place
 	$j("#photoplace").html($j("#photoplace").html() + "<h2>Photos</h2>" );
@@ -33,7 +34,14 @@ function loadMap() {
 	$j("#searchinput").css({ width: "220px" });
 
 	incidentPointSymbol = new esri.symbol.PictureMarkerSymbol({
-  		"url":"http://i.imgur.com/dS1At.png",
+  		"url":"http://i.imgur.com/vlLh1.png",
+  		"height":24,
+  		"width":20,
+		"yoffset":10,
+  		"type":"esriPMS"
+ 	});
+	businessPointSymbol = new esri.symbol.PictureMarkerSymbol({
+  		"url":"http://google-maps-icons.googlecode.com/files/workoffice.png",
   		"height":24,
   		"width":20,
 		"yoffset":10,
@@ -103,7 +111,10 @@ function mapNow(d){
 	polygonbounds.push(polygon);
 	pushFlickr(viewExtent);
 	pushPanoramio(viewExtent);
-	pushInstagram(viewExtent);
+        if((window.location + "").indexOf("instagram") > -1){
+                pushInstagram(viewExtent);
+        }
+	pushFoursquare(viewExtent);
 
 	polygon = esri.geometry.geographicToWebMercator( polygon );
 	var loc = new esri.Graphic( polygon,  new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID,
@@ -155,11 +166,29 @@ function viewPhotos(pan){
 		}
 	}
 }
+function pushFoursquare(bounds){
+	$j.getJSON("/foursquare?sw=" + bounds.ymin + "," + bounds.xmin + "&ne=" + bounds.ymax + "," + bounds.xmax, postvenues);
+}
+function postvenues(api){
+	var venues = api.response.venues;
+	var printedMonth = "1 January 2000";
+	for(var v=0; v<venues.length; v++){
+		var photoPoint = new esri.geometry.Point( venues[v].location.lng, venues[v].location.lat );
+		var inArea = false;
+		for(var g=0;g<polygonbounds.length;g++){
+			if(polygonbounds[g].contains(photoPoint)){
+				inArea = true;
+				break;
+			}
+		}	
+		if(inArea){
+			map.graphics.add(new esri.Graphic(esri.geometry.geographicToWebMercator(photoPoint), businessPointSymbol));
+		}
+	}
+}
+
 function pushFlickr(bounds){
-	var s = document.createElement('script');
-	s.src = "http://api.flickr.com/services/rest/?bbox=" + bounds.xmin + "," + bounds.ymin + "," + bounds.xmax + "," + bounds.ymax + "&extras=geo,owner_name,date_taken&per_page=60&tags=&method=flickr.photos.search&api_key=8f28e831de92bb79fcb9ec299227020a&has_geo=1&page=1&format=json&jsoncallback=loadFlickr&min_taken_date=2011-1-1";
-	s.type = "text/javascript";
-	document.body.appendChild(s);
+	$j.getJSON("http://api.flickr.com/services/rest/?bbox=" + bounds.xmin + "," + bounds.ymin + "," + bounds.xmax + "," + bounds.ymax + "&extras=geo,owner_name,date_taken&per_page=60&tags=&method=flickr.photos.search&api_key=8f28e831de92bb79fcb9ec299227020a&has_geo=1&page=1&format=json&jsoncallback=loadFlickr&min_taken_date=2011-1-1", loadFlickr);
 }
 function loadFlickr(response){
 	var photos = response.photos.photo;
@@ -199,7 +228,6 @@ function loadFlickr(response){
 		}
 	}
 }
-
 
 function pushInstagram(bounds){
 	var s = document.createElement('script');
