@@ -243,13 +243,9 @@ a:focus {
     width: 320px;
 }
 #globalsearch button {
-    background-color: #A3C1CC;
-    border: 0 none;
-    color: #666666;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 6px 10px;
+    padding: 7px 10px;
     text-shadow: 1px 1px 0 #DDDDDD;
+    vertical-align: top;
 }
 #globalsearch button:hover {
     cursor: pointer;
