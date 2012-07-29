@@ -1,9 +1,20 @@
 <h2>Blockstagram</h2>
 A downtown development concept based on OpenBlock and ArcGIS Online.
 
-Connect Blockstagram to an ArcGIS Shapefile or FeatureLayer to create a social media brochure for each block, economic development district, or neighborhood board.
+<h3>Does this sound like you?</h3>
+<ul>
+<li>Each of our neighborhoods is unique, and we could use an online brochure / pamphlet to show off each one.</li>
+<li>We have opportunity zones for businesses to start in our city, but we don't have a site showing where those areas are.</li>
+<li>We have a social media presence that we use to promote local businesses and events, but there's no way to see what happens in each neighborhood.</li>
+<li>The GIS Department has maps of opportunities downtown, and we want to share that online with potential businesses.</li>
+</ul>
 
-Add an official Instagram account and partner services to promote official content.
+<h3>Built with your photos and maps</h3>
+Set up Blockstagram to create a social media brochure for each economic development district or neighborhood board.
+
+Add official social media account and those of local businesses to promote each area.
+
+Ask the city's GIS team for a FeatureService or a shapefile to create brochure pages for each of your city's neighborhoods.
 
 <h3>Sample</h3>
 Macon, GA: imported Zipcodes, Opportunity Zones, and Tax Abatement Districts for downtown
