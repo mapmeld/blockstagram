@@ -12,7 +12,7 @@ A downtown development concept based on OpenBlock and ArcGIS Online.
 <h3>Built with your photos and maps</h3>
 Set up Blockstagram to create a social media brochure for each economic development district or neighborhood board.
 
-Add official social media account and those of local businesses to promote each area.
+Link to your official account on Twitter, Flickr, or Instagram.  Add local businesses' accounts, too!
 
 Ask the city's GIS team for a FeatureService or a shapefile to create brochure pages for each of your city's neighborhoods.
 
