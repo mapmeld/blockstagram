@@ -11,18 +11,288 @@ Required variables: nearby_locations, place, is_block
 
 <!-- begin block content -->
 {% block content %}
-
-<!-- begin block place_content -->
-{% block place_content %}{% endblock %}
-<!-- end block place_content -->
-
 <div id="nav-location">
+	<h2 id="bid_link"></h2>
 	<!-- begin block map -->
 	{% block map %}
-	<div id="mapwrapper" class="claro">
+	<div id="mapwrapper">
 		<script type="text/javascript">
 		{% autoescape off %}
+function chartSwitch(){
+	var selected = $("#biztype").val();
+	if(selected == "all"){
+		loadNeighborData(window.location + "");
+	}
+	else{
+		var csv = getCSV(neighbor, selected);
+		var datachart = "https://chart.googleapis.com/chart?cht=lc&chco=FF0000,0000FF&chs=480x400&chxt=x,y,r,y,r&chdlp=b&chdl=Employees|Establishments&chxl=4:|||Employees|||3:|||Establishments|||0:|1998|2001|2004|2007|2010";
+
+		var peoplemax = 0
+		for(var p=0;p<csv.people.length;p++){
+			peoplemax = Math.max(peoplemax, csv.people[p]);
+		}
+		for(var p=0;p<csv.people.length;p++){
+			csv.people[p] = Math.round(csv.people[p] / peoplemax * 133 - 33);
+		}
+		var placemax = 0
+		for(var p=0;p<csv.places.length;p++){
+			placemax = Math.max(placemax, csv.places[p]);
+		}
+		for(var p=0;p<csv.places.length;p++){
+			csv.places[p] = Math.round(csv.places[p] / placemax * 133 - 33);
+		}
+		datachart += "|1:||" + Math.round(placemax / 3 + placemax * 2 / 15) + "||" + Math.round(placemax / 3 + placemax * 2 / 5) + "||" + placemax + "|2:|||" + Math.round(peoplemax / 3 + peoplemax * 2 / 15) + "|||" +  Math.round(peoplemax / 3 + peoplemax * 2 / 5) + "|||" + peoplemax + "&chd=t:" + csv.people.join(",") + "|" + csv.places.join(",");
+
+
+		$(".business-chart").html('<img src="' + datachart + '"/><br/><small>Data from <a href="http://www.census.gov/econ/cbp/index.html">Census ZIP Code Business Patterns</a><br/>Photos from users of Instagram, Flickr, and Panoramio</small>');
+
+	}
+}
+function getCSV(zipcodes, category){
+	var totalEmployees = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+	var totalEstablishments = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+	for(var z=0;z<zipcodes.length;z++){
+		var zip = zipcodes[z];
+		var addEmployees = [ ];
+		var addEstablishments = [ ];
+		if(zip == 94601){
+			addEmployees = [9472,9519,9177,9018,9162,9305,8841,8428,9176,9912,10028,9130,8395];
+			if(category == "all"){
+				addEstablishments = [652,637,638,660,706,706,695,692,698,703,703,679,680];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [59,56,58,58,71,72,73,73,77,77,80,77,80];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [4,4,5,5,3,3,3,2,4,7,6,6,7];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [9,9,11,14,15,17,17,19,19,22,23,24,25];
+			}
+		}
+		if(zip == 94607){
+			addEmployees = [17264,17277,19520,20050,22102,21611,22220,21911,22187,22255,22861,21195,20602];
+			if(category == "all"){
+				addEstablishments = [1156,1186,1238,1252,1341,1327,1314,1374,1372,1343,1349,1312,1328];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [132,131,132,130,136,142,157,163,166,155,161,158,166];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [9,7,6,7,10,11,12,13,15,16,15,16,16];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [132,145,156,162,182,174,187,193,199,216,212,214,221];
+			}
+		}
+		if(zip == 94609){
+			addEmployees = [9553,9452,9966,9954,10457,10091,10294,10130,10116,10724,11649,11692,11399];
+			if(category == "all"){
+				addEstablishments = [663,653,680,668,687,685,665,649,665,657,649,633,634];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [36,42,44,44,42,53,50,50,51,55,60,57,61];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [6,8,6,7,8,6,6,5,5,4,3,4,3];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [43,43,52,53,54,50,49,44,44,52,44,50,44];
+			}
+		}
+
+		if(zip == 94610){
+			addEmployees = [6325,6869,5962,5978,5662,5436,5077,4573,4642,4507,4475,4538,4720];
+			if(category == "all"){
+				addEstablishments = [615,611,608,622,633,608,647,630,681,657,649,642,637];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [58,54,54,57,53,51,54,49,52,48,60,63,61];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [7,8,10,7,10,10,9,10,12,9,8,9,9];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [114,123,119,135,138,129,133,135,155,147,136,142,132];
+			}
+		}
+
+		if(zip == 94611){
+			addEmployees = [9855,9532,10599,10893,10950,10535,10456,11519,11011,10909,11264,11024,10645];
+			if(category == "all"){
+				addEstablishments = [923,942,965,980,917,905,908,911,891,890,876,872];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [71,75,73,70,67,67,67,66,71,75,78,79,80];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [19,20,20,19,20,19,17,22,22,21,19,15,21];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [146,152,155,170,168,163,168,170,167,149,157,149,160];
+			}
+		}
+
+		if(zip == 94612){
+			addEmployees = [31072,30472,32934,33700,36831,36866,37452,34994,36530,35270,36750,34450,33731];
+			if(category == "all"){
+				addEstablishments = [1731,1760,1791,1821,1879,1828,1847,1800,1805,1713,1686,1707,1700];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [106,110,119,117,118,117,117,120,123,128,124,143,145];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [26,24,23,27,25,26,26,24,25,25,22,21,21];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [498,511,509,494,527,528,525,533,543,543,515,517,536];
+			}
+		}
+		if(zip == 94618){
+			addEmployees = [3947,3947,4569,4642,4639,4734,4683,4658,4898,4613,4932,4881,4646];
+			if(category == "all"){
+				addEstablishments = [421,422,425,420,445,442,439,446,449,443,438,443,441];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [39,41,41,44,50,46,49,48,48,46,43,41,48];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [12,11,8,6,9,8,6,6,7,7,9,9,9];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [64,63,69,79,70,69,69,78,92,95,90,92,93];
+			}
+		}
+
+		if(zip == 94619){
+			addEmployees = [2400,2504,2219,2412,2133,2223,2366,2355,2344,2527,2610,2567,2661];
+			if(category == "all"){
+				addEstablishments = [275,272,274,292,290,274,284,289,300,297,294,287,278];
+			}
+			else if(category == 72){
+				// Accomodation / food
+				addEstablishments = [23,26,25,29,32,28,30,35,30,27,29,33,31];
+			}
+			else if(category == 71){
+				// Arts, entertainment, recreation
+				addEstablishments = [4,4,4,6,5,6,7,6,6,7,6,4,7];
+			}
+			else if(category == 54){
+				// Professional, scientific, and technical services
+				addEstablishments = [26,27,28,29,34,32,37,33,34,37,43,41,39];
+			}
+		}
+
+		for(var e=0;e<addEmployees.length;e++){
+			totalEmployees[e] += addEmployees[e];
+		}
+		for(var e=0;e<addEstablishments.length;e++){
+			totalEstablishments[e] += addEstablishments[e];
+		}
+	}
+	return { people: totalEmployees, places: totalEstablishments };
+}
+var neighbor;
+function loadNeighborData(url){
+	var datachart = "https://chart.googleapis.com/chart?cht=lc&chco=FF0000,0000FF&chs=480x400&chxt=x,y,r,y,r&chdlp=b&chdl=Employees|Establishments&chxl=4:|||Employees|||3:|||Establishments|||0:|1998|2001|2004|2007|2010";
+	var csv;
+	if(url.indexOf("downtown") > -1){
+		$("#bid_link").html("Learn more: <a href='http://downtownoakland.org/'>Downtown Oakland</a>");
+		// 94607 + 94612
+		neighbor = [94607, 94612];
+		csv = getCSV(neighbor, "all");
+	}
+	if(url.indexOf("fruitvale") > -1){
+		$("#bid_link").html("Learn more: <a href='http://www.unitycouncil.org/business-assistance/'>Fruitvale</a>");
+		neighbor = [94601];
+		csv = getCSV(neighbor, "all");
+		// 94601
+	}
+	if(url.indexOf("koreatown") > -1){
+		$("#bid_link").html("Learn more: <a href='http://koreatownnorthgate.org/'>Koreatown / Northgate</a>");
+		neighbor = [94609, 94612];
+		csv = getCSV(neighbor, "all");
+		// 94609 + 94612
+	}
+	if(url.indexOf("laurel") > -1){
+		$("#bid_link").html("Learn more: <a href='http://www.laureldistrictassociation.org/'>Laurel</a>");
+		neighbor = [94619];
+		csv = getCSV(neighbor, "all");
+		// 94619
+	}
+	if(url.indexOf("lakeshore") > -1){
+		$("#bid_link").html("Learn more: <a href='http://www.lakeshoreoakland.com/home/'>Lakeshore Ave</a>");
+		neighbor = [94610];
+		csv = getCSV(neighbor, "all");
+		// 94610
+	}
+	if(url.indexOf("montclair") > -1){
+		$("#bid_link").html("Learn more: <a href='http://montclairvillage.com/'>Montclair Village</a>");
+		neighbor = [94611];
+		csv = getCSV(neighbor, "all");
+		// 94611
+	}
+	if(url.indexOf("rockridge") > -1){
+		$("#bid_link").html("Learn more: <a href='http://www.rockridgedistrict.com/index.html'>Rockridge</a>");
+		neighbor = [94618];
+		csv = getCSV(neighbor, "all");
+		// 94618
+	}
+	if(url.indexOf("temescal") > -1){
+		$("#bid_link").html("Learn more: <a href='http://temescaldistrict.org/home'>Temescal / Telegraph</a>");
+		neighbor = [94609];
+		csv = getCSV(neighbor, "all");
+		// 94609
+	}
+	if(url.indexOf("merritt") > -1){
+		$("#bid_link").html("Learn more: <a href='http://www.lakemerritt-uptown.org/'>Lake Merritt / Uptown</a>");
+		neighbor = [94612];
+		csv = getCSV(neighbor, "all");
+		// 94612
+	}
+	
+	var peoplemax = 0
+	for(var p=0;p<csv.people.length;p++){
+		peoplemax = Math.max(peoplemax, csv.people[p]);
+	}
+	for(var p=0;p<csv.people.length;p++){
+		csv.people[p] = Math.round(csv.people[p] / peoplemax * 133 - 33);
+	}
+	var placemax = 0
+	for(var p=0;p<csv.places.length;p++){
+		placemax = Math.max(placemax, csv.places[p]);
+	}
+	for(var p=0;p<csv.places.length;p++){
+		csv.places[p] = Math.round(csv.places[p] / placemax * 133 - 33);
+	}
+	datachart += "|1:||" + Math.round(placemax / 3 + placemax * 2 / 15) + "||" + Math.round(placemax / 3 + placemax * 2 / 5) + "||" + placemax + "|2:|||" + Math.round(peoplemax / 3 + peoplemax * 2 / 15) + "|||" +  Math.round(peoplemax / 3 + peoplemax * 2 / 5) + "|||" + peoplemax + "&chd=t:" + csv.people.join(",") + "|" + csv.places.join(",");
+
+	$(".business-chart").html('<img src="' + datachart + '"/><br/><small>Data from <a href="http://www.census.gov/econ/cbp/index.html">Census ZIP Code Business Patterns</a></small>');
+}
 function loadMap() {
+	loadNeighborData(window.location + "");
+
 	$j("#place-detail-content").html($j("#place-detail-content").html() + "<h2>Photos</h2>" );
 
 	incidentPointSymbol = new esri.symbol.PictureMarkerSymbol({
@@ -83,7 +353,7 @@ function mapNow(d){
 			polygon2 = esri.geometry.geographicToWebMercator( polygon2 );
 			var loc2 = new esri.Graphic( polygon2,  new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID,
 				new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-				new dojo.Color([255,0,150]), 2),new dojo.Color([255,255,0,0.25])) );
+				new dojo.Color([255,0,150]), 2),new dojo.Color([255,255,0,0])) );
                 	map.graphics.add(loc2);
 		}
 	}
@@ -100,7 +370,7 @@ function mapNow(d){
 	polygon = esri.geometry.geographicToWebMercator( polygon );
 	var loc = new esri.Graphic( polygon,  new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID,
 	 	new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-		 new dojo.Color([255,0,150]), 2),new dojo.Color([255,255,0,0.25])) );
+		 new dojo.Color([255,0,150]), 2),new dojo.Color([255,255,0,0])) );
         map.graphics.add(loc);
 	map.setExtent( esri.geometry.geographicToWebMercator( viewExtent ), true );
 }
@@ -175,17 +445,17 @@ function loadFlickr(response){
 		photoPoint = new esri.geometry.Point( photos[p].longitude, photos[p].latitude );
 		var hasPhoto = false;
 		var instantDate = new Date(photos[p].datetaken);
-		if(instantDate.getFullYear() >= 2012){
-			hasPhoto = true;
-		}
-		else{
+		//if(instantDate.getFullYear() >= 2012){
+		//	hasPhoto = true;
+		//}
+		//else{
 			for(var g=0;g<polygonbounds.length;g++){
 				if(polygonbounds[g].contains(photoPoint)){
 					hasPhoto = true;
 					break;
 				}
 			}	
-		}
+		//}
 		if(hasPhoto){
 			var monthMatch = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 			if(printedMonth.indexOf(instantDate.getFullYear()) < -1){
@@ -232,6 +502,13 @@ function loadInstagram(response){
 		photoPoint = new esri.geometry.Point( photos[p].location.longitude, photos[p].location.latitude );
 		var hasPhoto = false;
 		var instantDate = new Date(photos[p].created_time * 1000);
+		if( (window.location + "").indexOf("downtown") > -1 ){
+			var nowlimit = new Date();
+			nowlimit = new Date( nowlimit - 24 * 60 * 60 * 1000 );
+			if(instantDate > nowlimit){
+				continue;
+			}
+		}
 		for(var g=0;g<polygonbounds.length;g++){
 			if(polygonbounds[g].getExtent().contains(photoPoint)){
 				hasPhoto = true;
@@ -304,8 +581,23 @@ function postAllPhotos(){
 	</div><!--/ #mapwrapper -->
 	{% endblock map %}
 	<!-- end block map -->
+	<div class="business-chart-dropdown" style="width:100%;text-align:center;">
+		<h3>Local Business Trends</h3>
+		<select id="biztype" onchange="chartSwitch()" style="font-size:20pt;margin-left:auto;margin-right:auto;">
+			<option selected="selected" value="all">All Business Types</option>
+			<option value="54">Professional, Scientific, and Technical Services</option>
+			<option value="71">Arts, Entertainment, and Recreation</option>
+			<option value="72">Accomodation and Food Services</option>
+		</select>
+		<br/>
+		Blue represents establishments, and is measured on the left scale
+		<br/>
+		Red represents total employed, and is measured on the right scale
+	</div>
+	<div class="business-chart">
+	</div>
 
-	<!-- block subscribe_links -->
+    <!-- block subscribe_links -->
     {% block subscribe_links %}
 	<div class="subscribe-links">
 		<p>Stay up to date:
@@ -313,9 +605,11 @@ function postAllPhotos(){
 		  {% if alerts_installed %}<a href="{{ place.alert_url }}">E-mail alerts</a>{% endif %}
 		</p>
 	</div>
-    {% endblock %}
-	<!-- end block subscribe_links -->
+    {% endblock subscribe_links %}
+    <!-- end block subscribe_links -->
 
+    <!-- block nearby_locations -->
+    {% block nearby_locations %}
 	{% if nearby_locations %}
 	<div id="nearby">
 	<h2>Nearby locations</h2>
@@ -326,6 +620,11 @@ function postAllPhotos(){
 		</ul>
 	</div><!-- end #nearby -->
 	{% endif %}
+    {% endblock nearby_locations %}
+    <!-- endblock nearby_locations -->
 
 </div><!--/ #nav-location -->
+<!-- begin block place_content -->
+{% block place_content %}{% endblock %}
+<!-- end block place_content -->
 {% endblock content %}
