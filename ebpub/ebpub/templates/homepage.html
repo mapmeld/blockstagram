@@ -1,19 +1,79 @@
 {% extends "base.html" %}{% comment %} -*- mode: django-html; tab-width: 4 -*- {% endcomment %}
 {% load eb humanize mapping %}
 
-{% block fulltitle %}InstaBlock{% endblock %}
+{% block fulltitle %}OpenBlock{% endblock %}
 
 {% block content %}
-		<div id="homepage-search" style="overflow:hidden;padding:5px;">
-		  <div style="width:1000px;height:230px;">
-			<h2>Represent your block:</h2>
-			<img src="http://distilleryimage9.s3.amazonaws.com/82ae1842d7b411e197a81231381018fa_7.jpg" width="170" height="170"/>
-			<img src="http://distilleryimage11.s3.amazonaws.com/0992ca44d6a511e1b62322000a1e8a75_7.jpg" width="170" height="170"/>
-			<img src="http://distilleryimage2.s3.amazonaws.com/8ec49920d5f311e1a4d022000a1e95fe_7.jpg" width="170" height="170"/>
-			<img width="170" height="170" src="http://distilleryimage11.s3.amazonaws.com/441157e8d68811e189de22000a1e95dd_7.jpg"/>
-			<img width="170" height="170" src="http://distilleryimage9.s3.amazonaws.com/e5e89ec8d43f11e1a953123138104e29_7.jpg"/>
-			<br/>
-			<a href="#" style="margin-left:15px;">More photos of Macon</a>
+		<div id="homepage-search" style="padding:5px;overflow-x:scroll;">
+  		 <h2>Open for Business:</h2>
+<a href="#" id="scrollArrow" style="text-decoration:none;float:right;margin-top:-35px;background-color:#fff;padding:4px;" onclick="scrollHomeRight()">&rarr;</a>
+		 <div>
+<table id="topboard" style="border:none;"><tr style="border:none;">
+<td>
+<a href="/locations/bid/downtown/">
+<img src="http://distilleryimage6.s3.amazonaws.com/11482b32d90511e1b99d22000a1e8ca3_7.jpg" width="170" height="170"/>
+<br/>
+Downtown
+</a>
+</td>
+<td>
+<a href="/locations/bid/fruitvale/">
+<img src="http://distilleryimage6.s3.amazonaws.com/0d3df91edb9d11e19f001231380fbca8_5.jpg" width="170" height="170"/>
+<br/>
+Fruitvale
+</a>
+</td>
+<td>
+<a href="/locations/bid/koreatownnorthgate/">
+<img height="170" width="170" src="http://farm8.static.flickr.com/7261/7547239654_1a9121c168_m.jpg"/>
+<br/>
+Koreatown / Northgate
+</a>
+</td>
+<td>
+<a href="/locations/bid/lake-merritt/">
+<img src="http://distilleryimage3.s3.amazonaws.com/4092d6d6d8fa11e1ba4022000a1e8932_5.jpg" width="170" height="170"/>
+<br/>
+Lake Merritt
+</a>
+</td>
+<td>
+<a href="/locations/bid/lakeshore/">
+<img src="http://farm9.static.flickr.com/8430/7587357170_d16763c53d_m.jpg" width="170"/>
+<br/>
+Lakeshore
+</a>
+</td>
+<td>
+<a href="">
+<img src="http://i.imgur.com/kdyWB.jpg" width="170" height="170"/>
+<br/>
+Laurel
+</a>
+</td>
+<td>
+<a href="/locations/bid/montclair/">
+<img src="http://farm7.static.flickr.com/6209/6071273405_7999c9f393_m.jpg" width="170"/>
+<br/>
+Montclair
+</a>
+</td>
+<td>
+<a href="/locations/bid/rockridge/">
+<img src="http://distilleryimage0.s3.amazonaws.com/efce3d90d8fd11e1830722000a1e95c5_5.jpg" width="170" height="170"/>
+<br/>
+Rockridge
+</a>
+</td>
+<td>
+<a href="/locations/bid/temescaltelegraph/">
+<img src="http://farm9.static.flickr.com/8284/7575919418_e6bba68326_m.jpg" width="170" height="170"/>
+<br/>
+Temescal / Telegraph
+</a>
+</td>
+</tr>
+		    </table>
 		  </div>
 		</div><!--/ #homepage-search -->
 
@@ -22,14 +82,29 @@
 		<div id="mapwrapper">
 		  <script type="text/javascript">
 		  {% autoescape off %}
-		  
+var scrollDir = "right";
+function scrollHomeRight(){
+	if(scrollDir == "right"){
+		$("#topboard").animate({ "marginLeft": "-800px" }, 700, function(){
+			$("#scrollArrow").html("&larr;");
+			scrollDir = "left";
+		});
+	}
+	else{
+		$("#topboard").animate({ "marginLeft": "0px" }, 700, function(){
+			$("#scrollArrow").html("&rarr;");
+			scrollDir = "right";
+		});
+	}
+}
+		  /*
 		  function loadMap() {
-  		  /*var config = {{map_configuration}};
+  		  var config = {{map_configuration}};
         config.center = [{{default_lon}}, {{default_lat}}];
         config.zoom = {{default_zoom}};
-        return new OBMap(config);        */
+        return new OBMap(config);        
   		}
-  		
+  		*/
   		{% endautoescape %}
 		  </script>
 		{% include "richmaps/richmap.html" %}
@@ -41,7 +116,7 @@
 				{% for location_type in location_type_list %}
 					<li><a href="{{ location_type.url }}"><strong class="number">{{ location_type.count|intcomma }}</strong> {{ location_type.plural_name|capfirst }}</a></li>
 				{% endfor %}
-				<li><a href="/streets/"><strong class="number">{{ street_count|intcomma }}</strong> Streets</a></li>
+				<li><a href="{% url ebpub-street-list %}"><strong class="number">{{ street_count|intcomma }}</strong> Streets</a></li>
 			</ul>
 		</div><!--/ #intro-explore-->
 	</div><!-- end nav-location -->
@@ -55,7 +130,7 @@
 		<p>New in the last {{ num_days }} days</p>
 		<ul>
 			{% for chart in non_empty_date_charts %}
-			<li>
+			<li {% if chart.schema.id not in allowed_schema_ids %}class="restricted-schema"{% endif %}>
 				{% map_icon_img chart.schema %}
 				<strong>{{ chart.total_count|intcomma }}</strong> <a href="{{ chart.schema.url }}">{% filter capfirst %}{% schema_plural_name chart.schema chart.total_count %}{% endfilter %}</a>
 			</li>
@@ -64,21 +139,46 @@
 		{% endif %}
 		{% if empty_date_charts %}
 		<ul>Older: {% for chart in empty_date_charts %}
-            <li><a href="{{ chart.schema.url }}">{% map_icon_img chart.schema %}{{ chart.schema.plural_name|capfirst }}</a>
+            <li {% if chart.schema.id not in allowed_schema_ids %}class="restricted-schema"{% endif %}><a href="{{ chart.schema.url }}">{% map_icon_img chart.schema %}{{ chart.schema.plural_name|capfirst }}</a>
             </li>{% endfor %}
         </ul>
 		{% endif %}
 	</div><!--/ #public-records -->
 	<div id="more">
-    {% if more_schemas %}
+	{% if more_schemas %}
 		<h2>More news</h2>
 		<ul>
 		{% for schema in more_schemas %}
 			<li><a href="{{ schema.url }}">{% map_icon_img schema %}{{ schema.plural_name|capfirst }}</a></li>
 		{% endfor %}
 		</ul>
-    {% endif %}
-    </div><!--/ #more -->
+	{% endif %}
+
+	<!-- begin block restrictedschemas -->
+	{% block restrictedschemas %}
+	<!-- override this block to do something with restricted_schemas -->
+	{% endblock restrictedschemas %}
+	<!-- end block restrictedschemas -->
+
+	</div><!--/ #more -->
+
+	<!--  begin block featuredlookups -->
+	{% block featuredlookups %}
+	{% get_featured_lookups_by_schema %}
+	{% if featured_lookups %}
+	<!-- This only shows up if you have some Lookups with featured=True -->
+	<div id="featured-tags">
+		<h2>Featured Tags</h2>
+		<ul>
+		{% for schema, tags in featured_lookups.items %}
+		  {% for tag in tags %}
+			<li><a href="{{ tag.url }}">{{ tag.lookup }}</a></li>
+		  {% endfor %}
+		{% endfor %}
+		</ul>
+	</div><!--/ #tag_info -->
+	{% endif %}
+	{% endblock featuredlookups %}<!--  end block featuredlookups -->
 
     </div><!-- / #frontpage-text -->
 
@@ -87,8 +187,8 @@
 <div id="sidebar">
   <!-- begin block extracontent -->
   {% block extracontent %}
-  {% endblock %}
+  {% endblock extracontent %}
   <!-- end block extracontent -->
 </div><!--/ #sidebar -->
 
-{% endblock %}
+{% endblock content %}
