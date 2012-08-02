@@ -25,7 +25,7 @@ function chartSwitch(){
 	}
 	else{
 		var csv = getCSV(neighbor, selected);
-		var datachart = "https://chart.googleapis.com/chart?cht=lc&chco=FF0000,0000FF&chs=480x400&chxt=x,y,r,y,r&chdlp=b&chdl=Employees|Establishments&chxl=4:|||Employees|||3:|||Establishments|||0:|1998|2001|2004|2007|2010";
+		var datachart = "http://chart.googleapis.com/chart?cht=lc&chco=FF0000,0000FF&chs=480x400&chxt=x,y,r,y,r&chdlp=b&chdl=Employees|Establishments&chm=s,ff0000,0,-1,6|s,0000ff,1,-1,6&chxl=4:|||Employees|||3:|||Establishments|||0:|1998|2001|2004|2007|2010";
 
 		var peoplemax = 0
 		for(var p=0;p<csv.people.length;p++){
@@ -44,7 +44,7 @@ function chartSwitch(){
 		datachart += "|1:||" + Math.round(placemax / 3 + placemax * 2 / 15) + "||" + Math.round(placemax / 3 + placemax * 2 / 5) + "||" + placemax + "|2:|||" + Math.round(peoplemax / 3 + peoplemax * 2 / 15) + "|||" +  Math.round(peoplemax / 3 + peoplemax * 2 / 5) + "|||" + peoplemax + "&chd=t:" + csv.people.join(",") + "|" + csv.places.join(",");
 
 
-		$(".business-chart").html('<img src="' + datachart + '"/><br/><small>Data from <a href="http://www.census.gov/econ/cbp/index.html">Census ZIP Code Business Patterns</a><br/>Photos from users of Instagram, Flickr, and Panoramio</small>');
+		$(".business-chart").html('<img src="' + datachart + '"/><br/><small>Community and economic data from Bureau of Labor Statistics and the U.S. Census Bureau.<br/>Photos from users of Instagram, Flickr, and Panoramio. Business districts from OpenOakland.org</small>');
 
 	}
 }
@@ -312,7 +312,7 @@ function getCSV(zipcodes, category){
 }
 var neighbor;
 function loadNeighborData(url){
-	var datachart = "https://chart.googleapis.com/chart?cht=lc&chco=FF0000,0000FF&chs=480x400&chxt=x,y,r,y,r&chdlp=b&chdl=Employees|Establishments&chxl=4:|||Employees|||3:|||Establishments|||0:|1998|2001|2004|2007|2010";
+	var datachart = "https://chart.googleapis.com/chart?cht=lc&chm=s,ff0000,0,-1,6|s,0000ff,1,-1,6&chco=FF0000,0000FF&chs=480x400&chxt=x,y,r,y,r&chdlp=b&chdl=Employees|Establishments&chxl=4:|||Employees|||3:|||Establishments|||0:|1998|2001|2004|2007|2010";
 	var csv;
 	if(url.indexOf("downtown") > -1){
 		$("#bid_link").html("Learn more: <a href='http://downtownoakland.org/'>Downtown Oakland</a>");
@@ -385,7 +385,8 @@ function loadNeighborData(url){
 	}
 	datachart += "|1:||" + Math.round(placemax / 3 + placemax * 2 / 15) + "||" + Math.round(placemax / 3 + placemax * 2 / 5) + "||" + placemax + "|2:|||" + Math.round(peoplemax / 3 + peoplemax * 2 / 15) + "|||" +  Math.round(peoplemax / 3 + peoplemax * 2 / 5) + "|||" + peoplemax + "&chd=t:" + csv.people.join(",") + "|" + csv.places.join(",");
 
-	$(".business-chart").html('<img src="' + datachart + '"/><br/><small>Data from <a href="http://www.census.gov/econ/cbp/index.html">Census ZIP Code Business Patterns</a></small>');
+	$(".business-chart").html('<img src="' + datachart + '"/><br/><small>Community and economic data from Bureau of Labor Statistics and the U.S. Census Bureau.<br/>Photos from users of Instagram, Flickr, and Panoramio. Business districts from OpenOakland.org</small>');
+
 }
 function loadMap() {
 	loadNeighborData(window.location + "");
@@ -676,6 +677,9 @@ function postAllPhotos(){
 	{% endblock map %}
 	<!-- end block map -->
 	<div class="business-chart-dropdown" style="width:100%;text-align:center;">
+		<h3>Community Outreach</h3>
+		<p><strong>About the SF/Oakland/Fremont Area:</strong> 17.9% of residents are involved in school groups, 14.6% in Church or other Religious groups, and 12.7% in Sports or Recreation groups. Almost half - 46.1% - say they talk with their neighbors frequently. And nearly a fifth - 18.8% - volunteer through teaching and tutoring.</p>
+		<p>Don't just open a business in Oakland - <strong>be a good neighbor!</strong> Help employees get involved in your community and build loyalty with your customers by giving back.</p>
 		<h3>Local Business Trends</h3>
 		<select id="biztype" onchange="chartSwitch()" style="font-size:20pt;margin-left:auto;margin-right:auto;">
 			<option selected="selected" value="all">All Business Types</option>
