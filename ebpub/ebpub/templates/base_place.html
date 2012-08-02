@@ -414,7 +414,7 @@ function viewPhotos(pan){
 			}
 			//$j("#place-detail-content").html($j("#place-detail-content").html() + "<img src='" + pan.photos[p].photo_file_url + "' width='120'/>" );
 
-			var addPhoto = "<a href='" + pan.photos[p].photo_file_url + "'><img src='" + pan.photos[p].photo_file_url + "' width='120'/></a>";
+			var addPhoto = "<a href='" + pan.photos[p].photo_url + "'><img src='" + pan.photos[p].photo_file_url + "' width='120'/></a>";
 			if(allPhotos[printedMonth]){
 				allPhotos[printedMonth].push(addPhoto);
 			}
@@ -462,13 +462,13 @@ function loadFlickr(response){
 				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
 				//$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
 			}
-			else if(printedMonth.indexOf(monthMatch[instantDate.getMonth()])){
+				else if(printedMonth.indexOf(monthMatch[instantDate.getMonth()])){
 				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
 				//$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
 			}
 			//console.log(photoPoint);
 			//$j("#place-detail-content").html($j("#place-detail-content").html() + "<a href='" + flickrUrl.replace("_m.jpg","_b.jpg") + "' target='_blank'><img src='" + flickrUrl + "' width='120'/></a>" );
-			var addPhoto = "<a href='" + flickrUrl.replace("_m.jpg","_b.jpg") + "' target='_blank'><img src='" + flickrUrl + "' width='120'/></a>";
+			var addPhoto = "<a href='http://www.flickr.com/photos/" + photos[p].owner + "/" + photos[p].id + "' target='_blank'><img src='" + flickrUrl + "' width='120'/></a>";
 			if(allPhotos[printedMonth]){
 				allPhotos[printedMonth].push( addPhoto );
 			}
@@ -502,13 +502,6 @@ function loadInstagram(response){
 		photoPoint = new esri.geometry.Point( photos[p].location.longitude, photos[p].location.latitude );
 		var hasPhoto = false;
 		var instantDate = new Date(photos[p].created_time * 1000);
-		if( (window.location + "").indexOf("downtown") > -1 ){
-			var nowlimit = new Date();
-			nowlimit = new Date( nowlimit - 24 * 60 * 60 * 1000 );
-			if(instantDate > nowlimit){
-				continue;
-			}
-		}
 		for(var g=0;g<polygonbounds.length;g++){
 			if(polygonbounds[g].getExtent().contains(photoPoint)){
 				hasPhoto = true;
@@ -519,15 +512,11 @@ function loadInstagram(response){
 			var monthMatch = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 			if(printedMonth.indexOf(instantDate.getFullYear()) < -1){
 				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
-				//$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
 			}
 			else if(printedMonth.indexOf(monthMatch[instantDate.getMonth()])){
 				printedMonth = monthMatch[ instantDate.getMonth() ] + " " + instantDate.getFullYear();
-				//$j("#place-detail-content").html($j("#place-detail-content").html() + "<h4>" + printedMonth + "</h4>");
 			}
-			//console.log(photoPoint);
-			//$j("#place-detail-content").html($j("#place-detail-content").html() + "<a href='" + photos[p].images.standard_resolution.url + "' target='_blank'><img src='" + flickrUrl + "' width='120'/></a>" );
-			var addPhoto = "<a href='" + photos[p].images.standard_resolution.url + "' target='_blank'><img src='" + flickrUrl + "' width='120'/></a>";
+			var addPhoto = "<a href='" + photos[p].link + "' target='_blank'><img src='" + flickrUrl + "' width='120'/></a>";
 			if(allPhotos[printedMonth]){
 				allPhotos[printedMonth].push( addPhoto );
 			}
