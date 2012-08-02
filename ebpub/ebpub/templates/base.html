@@ -3,17 +3,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
-<title>{% block fulltitle %}{% block title %}{% endblock %} | {% block city_title %}InstaBlock{% endblock %}{% endblock fulltitle %}</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta name="robots" content="noarchive"/>
+<title>{% block fulltitle %}{% block title %}{% endblock %} | {% block city_title %}OpenBlock{% endblock %}{% endblock fulltitle %}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="robots" content="noarchive">
 <link rel="home" title="Home" href="{% url ebpub-homepage %}">
 
 {% slimall %}
-<link rel="stylesheet" type="text/css" href="/styles/style-reset.css" />
-<link rel="stylesheet" type="text/css" href="/styles/openblock.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/style-reset.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}scripts/chosen.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/openblock.css" />
+<!--
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}styles/calendrical.css" />
+-->
 {% endslimall %}
 
 <script src="{{ JQUERY_URL }}" type="text/javascript" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}styles/smoothness/jquery-ui-1.8.17.custom.css" />
 
 <script type="text/javascript">
 // Not using jquery.noConflict() because ironically it causes a conflict
@@ -23,7 +28,12 @@ var $j = $;
 var LastMapWidth = "";
 </script>
 {% slimall %}
-<script src="/scripts/ob-jquery-csrf.js" type="text/javascript" charset="utf-8"></script>
+<script src="{{ STATIC_URL }}scripts/ob-jquery-csrf.js" type="text/javascript" charset="utf-8"></script>
+<script src="{{ STATIC_URL }}scripts/chosen.jquery.js" type="text/javascript" charset="utf-8"></script>
+<!--
+<script src="{{ STATIC_URL}}scripts/jquery.calendrical.js"></script>
+-->
+<script src="{{ STATIC_URL}}scripts/json2.js"></script>
 {% endslimall %}
 
 <!-- ArcGIS -->
@@ -31,6 +41,25 @@ var LastMapWidth = "";
 <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=2.8compact"></script>
 <link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.8/js/esri/dijit/css/Popup.css" rel="stylesheet"/>
 <style type="text/css">
+#mapNotes_7975_3_layer{
+	cursor: pointer;
+}
+#bid_link{
+	width: 96.5%;
+	background-color: lightblue;
+	margin-bottom: -15px !important;
+	padding: 10px;
+	padding-bottom: 25px;
+	border-radius: 10px;
+}
+#bid_link a{
+	color: blue;
+	text-decoration: none;
+}
+#bid_link a:hover{
+	color: darkblue;
+	text-decoration: underline;
+}
 #detailmap_infowindow div .window{
 	display: none;
 }
@@ -42,6 +71,12 @@ var LastMapWidth = "";
 }
 #nav-breadcrumb li:last-child{
 	background: none;
+}
+.nav-view{
+	display: none;
+}
+.select-filter{
+	display: none;
 }
 </style>
 <link href="http://serverapi.arcgisonline.com/jsapi/arcgis/2.8/js/dojo/dijit/themes/claro/claro.css" rel="stylesheet" type="text/css"/>
@@ -58,13 +93,13 @@ var map, incidentsGraphicsLayer, initExtent;
 
 function mapinit() {
 	initExtent = new esri.geometry.Extent({
-		"xmin":-83.702193,
-		"ymin":32.781055,
-		"xmax":-83.54538,
-		"ymax":32.892187,
+		"xmin":-122.288132,
+		"ymin":37.781434,
+		"xmax":-122.219639,
+		"ymax":37.850662,
 		"spatialReference":{"wkid":4326}
 	});
-	initExtent = initExtent.expand(1.5);
+	//initExtent = initExtent.expand(1.5);
 	var urlObject = esri.urlToObject(document.location.href);
 	if(urlObject.query && urlObject.query.webmap){
 		$j("#detailmap").css({ height: "650px" });
@@ -89,8 +124,35 @@ function mapinit() {
 		});
 		b.addErrback(function(e){
 			console.log("CreateMap failed: ",dojo.toJson(e));
-			alert(dojo.toJson(e));
+			//alert(dojo.toJson(e));
 		});
+	}
+	else if($("#nav-breadcrumb").children().length <= 1){
+		// homepage
+		$j("#detailmap").css({ height: "650px" });
+		var b=esri.arcgis.utils.createMap(
+			"133106ab6ea54c22841df57342231d05",
+			"detailmap",
+			{
+				mapOptions: {
+					slider:true,
+					nav:false,
+					wrapAround180:true
+				}
+			});
+		b.addCallback(function(e){
+			map=e.map;
+			if(map.loaded){
+				onMapLoaded();
+			}
+			else{
+				dojo.connect(map,"onLoad",onMapLoaded);
+			}
+		});
+		b.addErrback(function(e){
+			console.log("CreateMap failed: ",dojo.toJson(e));
+			//alert(dojo.toJson(e));
+		});		
 	}
 	else{
 		map = new esri.Map("detailmap",{
@@ -113,8 +175,10 @@ function onMapLoaded(){
 		}
 		else{
 			// Use MapQuest Open layer
-			var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://otile1.mqcdn.com/tiles/1.0.0/osm" ] });
-			map.addLayer(osmLayer);
+			if($("#nav-breadcrumb").children().length > 1){
+				var osmLayer = new esri.layers.OpenStreetMapLayer({ tileServers: [ "http://otile1.mqcdn.com/tiles/1.0.0/osm" ] });
+				map.addLayer(osmLayer);
+			}
 
 			// Use Esri Terrain Basemap
 			//var basemap = new esri.layers.ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer");
@@ -135,16 +199,58 @@ function onMapLoaded(){
 			LastMapWidth = map.width;
 		}
 	}, 500);
+
+/*var neighborhoods = [];
+
+	if($("#nav-breadcrumb").children().length <= 1){
+		// homepage map buttons
+		neighborhoods = [
+
+{ name: "Downtown", latlng: [ 37.804231, -122.271646 ], photo: "http://distilleryimage6.s3.amazonaws.com/11482b32d90511e1b99d22000a1e8ca3_7.jpg" },
+{ name: "Fruitvale", latlng: [ 37.778134, -122.224997 ], photo: "http://distilleryimage6.s3.amazonaws.com/0d3df91edb9d11e19f001231380fbca8_5.jpg" },
+{ name: "Koreatown / Northgate", latlng: [ 37.821895, -122.266346 ], photo: "http://farm8.static.flickr.com/7261/7547239654_1a9121c168_m.jpg" },
+{ name: "Lake Merritt", latlng: [ 37.8093, -122.263084 ], photo: "http://distilleryimage3.s3.amazonaws.com/4092d6d6d8fa11e1ba4022000a1e8932_5.jpg" },
+{ name: "Lakeshore", latlng: [ 37.810503, -122.244609 ], photo: "http://farm9.static.flickr.com/8430/7587357170_d16763c53d_m.jpg" },
+{ name: "Laurel", latlng: [ 37.791481, -122.198282 ], photo: "http://i.imgur.com/kdyWB.jpg" },
+{ name: "Montclair", latlng: [ 37.826844, -122.210084 ], photo: "http://farm7.static.flickr.com/6209/6071273405_7999c9f393_m.jpg" },
+{ name: "Rockridge", latlng: [ 37.842656, -122.249587 ], photo: "http://distilleryimage0.s3.amazonaws.com/efce3d90d8fd11e1830722000a1e95c5_5.jpg" },
+{ name: "Temescal / Telegraph", latlng: [ 37.840097, -122.267633 ], photo: "http://farm9.static.flickr.com/8284/7575919418_e6bba68326_m.jpg" }
+
+		];
+var blockSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 15,
+   new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+   new dojo.Color([0,0,255,0.5]), 1),
+   new dojo.Color([100,100,255,0.5]));
+		for(var x=0;x<neighborhoods.length;x++){
+			var pt = new esri.geometry.Point( neighborhoods[x].latlng[1], neighborhoods[x].latlng[0] );
+			var graphic = new esri.Graphic(esri.geometry.geographicToWebMercator(pt), blockSymbol);
+			graphic.attributes = neighborhoods[x];
+			graphic.attributes.pt = pt;
+			map.graphics.add(graphic);
+			dojo.connect(graphic, "onClick", function(){
+				console.log("clicked it!");
+				map.infoWindow.setTitle(e.attributes.name);
+				map.infoWindow.setContent("<img src='" + e.attributes.photo + "' width='250' height='250'/>");
+				map.infoWindow.show(e.pt);
+			});
+		}
+	}
+*/
+
 	loadMap();
 }
 dojo.addOnLoad(mapinit);
 </script>
 
+<script src="{{ STATIC_URL }}scripts/jquery-ui-1.8.17.custom.min.js" type="text/javascript" charset="utf-8"></script>
 <!-- begin block extrahead -->
 {% block extrahead %}{% endblock %}
 <!-- end block extrahead -->
 
 <style type="text/css">
+.mediaSection{
+	margin-top: -35px;
+}
 #detailmap{
 	width:100%;
 	height:100%;
@@ -193,25 +299,10 @@ ul#nav-breadcrumb, #nav-breadcrumb li{
 <body {% if bodyid %}id="{{bodyid}}"{% endif %} {% if bodyclass %}class="{{bodyclass}}"{% endif %}>
   <div id="container">
 	<div id="header" style="padding:15px;">
-		<h1 style="width:none;"><a href="{% url ebpub-homepage %}">InstaBlock: {% METRO_NAME %}</a></h1>
+		<h1 style="width:none;"><a href="{% url ebpub-homepage %}">OpenBlock: {% METRO_NAME %}</a></h1>
 		<div id="globalnav">
-		    <!--
-			<ul>
-				<li><a href="/news/">News</a></li>
-				<li><a href="/locations/">Locations</a></li>
-			</ul>
-			-->
 			{% block userlinks %}
-			<div id="userlinks">
-			  {% if USER_EMAIL %}
-			  <form action="{% url ebpub.accounts.views.logout %}" method="POST">
-				{% csrf_token %}
-				<p>Logged in as <a href="{% url ebpub.accounts.views.dashboard %}">{{ USER_EMAIL }}</a>. <button type="submit">Log out</button></p>
-			  </form>
-			  {% else %}
-			  <p><a href="{% url ebpub.accounts.views.login %}" rel="nofollow">Sign in</a> or <a href="{% url ebpub.accounts.views.register %}" rel="nofollow">register</a> for extra features</p>
-			  {% endif %}
-			</div><!--/ #userlinks -->
+			{% include "db/snippets/userlinks.html" %}
 			{% endblock userlinks %}
 			{% set_search_placeholder "Search for" as placeholder %}
 			<form action="{% url ebpub-search %}" id="globalsearch" onsubmit="if ($j('#searchinput').val() == '{{ placeholder }}') return false; return true;">
@@ -228,7 +319,7 @@ ul#nav-breadcrumb, #nav-breadcrumb li{
 		{% endblock breadcrumbs %}
 		<!-- end block breadcrumbs -->
 	</div><!-- / #header -->
-	<div id="main" style="width:85%;">
+	<div id="main">
 	  <!-- begin block messages -->
 		{% block messages %}
 	    {% if messages %}
