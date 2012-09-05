@@ -16,7 +16,11 @@ Link to your official account on Twitter, Flickr, or Instagram.  Add local busin
 
 Ask the city's GIS team for a FeatureService or a shapefile to create brochure pages for each of your city's neighborhoods.
 
-<h3>Sample</h3>
+<h3>Samples</h3>
+Oakland, CA: imported Business Districts from data.OpenOakland.org, Census data, photos from Instagram and Flickr
+
+<img src="http://i.imgur.com/cltgJ.png"/>
+
 Macon, GA: imported Zipcodes, Opportunity Zones, and Tax Abatement Districts for downtown
 
 <img src="http://i.imgur.com/E3yDA.png"/>
